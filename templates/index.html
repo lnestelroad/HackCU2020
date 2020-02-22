@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+        <script src="../static/js/index.js"></script>
+    </head>
+    <body>
+        <div class="topnav">
+            <a class="active" href="/">Home</a>
+        </div> 
+        <div class='container'>
+            <div class='jumbotron'>
+                <h1 id='header'>LASP Test Page</h1>
+            </div>
+        </div>
+        <div id='testButton' class='container'>
+            <br>
+            <form action='/input/' method="POST">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" name="first">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" name="last">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col'>
+                        <input type="text" class="form-control" placeholder="Age" name="age">
+                    </div>
+                    <div class='col'>
+                        <input type="text" class="form-control" placeholder="Major" name="major">
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" >
+                </div>
+            </form>
+            <form action='/data/'>
+                <button id='click' class='btn btn-primary'>Show SQL Request</button>
+            </form>
+        <br>
+        </div>
+        {% if data %}
+        <div class='container'>
+            <label>Results</label>
+            {% for person in data %}
+                <ul>
+                    <li>Name: {{person.first}} {{person.last}}</li>
+                    <li>Age: {{person.age}}</li>
+                    <li>ID: {{person.ID}}</li>
+                    <li>Major: {{person.major}}</li>
+                </ul>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </body>
+</html>
