@@ -1,0 +1,22 @@
+Restaurants:
+    Carelli's
+    Cosmo's Pizza
+    May Wah
+    Cafe Mexicali
+    Moe's Original BBQ - Boulder
+    Taj Indian Cuisine
+    Dark Horse
+    Oregano's Italian Joint
+    Under The Sun Eatery and Pizzeria
+    Tandoori Grill
+    Pho Kitchen Bar & Grill
+    Chautauqua Dining Hall
+    Hot Pot Noodle House
+    South Side Walnut Cafe
+    Starbucks
+
+Food Banks:
+    Harvest of Hope
+    Community Food Share
+    Boulder Food Rescue
+    Emergency Family Assistance Association

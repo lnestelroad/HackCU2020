@@ -52,7 +52,6 @@ class Database():
         Food = "CREATE TABLE IF NOT EXISTS Foods( \
             FoodID SERIAL PRIMARY KEY, \
             FoodType VARCHAR (100) NOT NULL, \
-            Quantity FLOAT NOT NULL, \
             ShelfLife DATE, \
             Present BOOL,\
 			Parishable BOOL \
@@ -88,12 +87,23 @@ class Database():
             FoodID INTEGER NOT NULL, \
             RestaurantID INTEGER NOT NULL, \
             DonationCenterID INTEGER NOT NULL, \
+            QuantityDonated INTEGER NOT NULL, \
             FOREIGN KEY(RestaurantID) REFERENCES Restaurant(RestaurantID), \
             FOREIGN KEY(FoodID) REFERENCES Foods(FoodID), \
             FOREIGN KEY(DonationCenterID) REFERENCES Donation_Center(DonationCenterID) \
             );"
         self.cursor.execute(Donations)
 
+        # Creates a table for Donations
+        FoodAmounts = "CREATE TABLE IF NOT EXISTS FoodAmount( \
+            AmountsID SERIAL PRIMARY KEY, \
+            FoodID INTEGER NOT NULL, \
+            DonationCenterID INTEGER NOT NULL, \
+            Amount INTEGER NOT NULL, \
+            FOREIGN KEY(FoodID) REFERENCES Foods(FoodID), \
+            FOREIGN KEY(DonationCenterID) REFERENCES Donation_Center(DonationCenterID) \
+            );"
+        self.cursor.execute(Donations)
 
         # Execute and commit the sql
         self.cxn.commit()
