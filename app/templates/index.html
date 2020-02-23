@@ -1,19 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if current_user.is_anonymous %}
-    <h1>YOU ARE NOT LOGGED IN</h1>
-    {% else %}
-    <h1>Hi, {{current_user.username}}!</h1>
-    {% endif %}
     <!-- {% for post in posts %}
     <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
     {% endfor %} -->
-    <h1>Help win the battle of food waste with us</h1>
-    <p>Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the global battle against food waste.</p>
-
     <div class="container-fluid p-3 my-3 border">
-        <h1>Help win the battle of food waste with us</h1>
+        <h1>Help win the battle against food waste with us</h1>
         <p>
             Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the global battle against food waste, help the environment, and provide access to food to those who need it most.
         </p>
@@ -25,12 +17,35 @@
     </div>
 
     <div class="container-fluid p-3 my-3 bg-dark text-white">
-        <h1>My First Bootstrap Page</h1>
-        <p>This container has a dark background color and a white text, and some extra padding and margins.</p>
+        <h1>food waste is a *problem*,</h1>
+        <ul>
+            <li>Between 30% - 40% of the United States' food supply is wasted</li>
+            <li>Of the estimated 125 - 160 billion pounds of food that goes to waste every year, much of it is perfectly edible and nutritous</li>
+            <li>Food waste costs the United States $218 billion every year</li>
+            <li>US restauarants generate an estimated 22 - 33 billion pounds of food waste each year</li>
+            <li>Schools, hotels, and hospitals generate an additional 7 - 11 billion pounds of wasted food every year</li>
+        </ul>
     </div>
 
-    <div class="container-fluid p-3 my-3 bg-primary text-white">
-        <h1>My First Bootstrap Page</h1>
-        <p>This container has a blue background color and a white text, and some extra padding and margins.</p>
+    <div class="container-fluid p-3 my-3 border">
+        <h1>and there are people in *need*,</h1>
+        <ul>
+            <li>1 in 6 American children live in a state of food insecurity, not knowing where their next meal will come from</li>
+            <li>There are approximately 50,000,000 food insecure people in the United States, </li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container-fluid p-3 my-3 bg-dark text-white">
+        <h1>but we have a *solution*</h1>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
     </div>
 {% endblock %}
