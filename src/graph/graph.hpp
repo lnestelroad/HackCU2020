@@ -6,6 +6,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/subgraph.hpp>
 #include <boost/graph/graphviz.hpp>
+#include "parsing.hpp"
 
 struct Vertex
 {
@@ -41,7 +42,7 @@ using vertex_t = SubGraph::vertex_descriptor;
 using vertex_pt = SubGraph::vertex_property_type;
 
 // Constructs a graph from filename
-SubGraph constructGraph(const std::string &filename);
+SubGraph constructGraph(const std::string &jsonfile);
 
 // Constructs a subgraph from a vector of edges
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges);

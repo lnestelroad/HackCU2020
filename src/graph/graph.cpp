@@ -4,20 +4,52 @@
 
 const static std::string filename{"viz.dot"};
 
-SubGraph constructGraph(const std::string &filename)
+SubGraph constructGraph(const std::string &jsonfile)
 {
     using namespace boost;
-    // IMPLIMENT
     SubGraph g{0};
+
+    json j;
+
+    std::ifstream i(jsonfile);
+    i >> j;
+
+    //std::cout << j;
+
+    std::map<std::string, vertex_t> nameMap{};
+
+    for (json::iterator it = j.begin(); it != j.end(); ++it)
+    {
+        // Initializing full graph
+        vertex_t new_vert = add_vertex(g);
+        std::cout << it.key() << std::endl;
+        put(vertex_name, g, new_vert, it.key());
+        nameMap[it.key()] = new_vert;
+    }
+    for (json::iterator it = j.begin(); it != j.end(); ++it)
+    {
+        for (json::iterator it2 = it.value()["edges"].begin(); it2 != it.value()["edges"].end(); ++it2)
+        {
+            if (nameMap.find(it2.key()) == nameMap.end())
+            {
+                vertex_t new_vert = add_vertex(g);
+                put(vertex_name, g, new_vert, it2.key());
+                nameMap[it2.key()] = new_vert;
+            }
+            auto [new_edge, added] = add_edge(nameMap.at(it.key()), nameMap.at(it2.key()), g);
+            //it2.value().dump(),
+
+            put(edge_weight, g, new_edge, stoi(it2.value()["edge_weight"].dump()));
+        }
+    }
+
     return g;
 }
 
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges)
 {
     using namespace boost;
-    // IMPLIMENT
     SubGraph g = parent.create_subgraph();
-    std::cout << edges.size() << std::endl;
     for (const auto &ed : edges)
     {
         vertex_t src = source(ed, parent);
@@ -64,6 +96,9 @@ SubGraph constructFromMST(SubGraph &parent, const std::vector<edge_t> &edges)
         vertex_t src = source(ed, parent);
         vertex_t dest = target(ed, parent);
 
+        //put(vertex_name, g, src, get(get(vertex_name, parent), src));
+        //put(vertex_name, g, dest, get(get(vertex_name, parent), dest));
+
         add_edge(src, dest, get(get(edge_weight, parent), ed), g);
     }
 
@@ -78,7 +113,7 @@ void appendSubgraph(SubGraph &graph, const std::vector<vertex_t> &vertices)
     }
 }
 
-int main()
+void graphTest()
 {
     using namespace boost;
 
@@ -130,10 +165,32 @@ int main()
         //std::cout << get(get(edge_weight, G0), ed) << "\n";
     }
 
-    SubGraph MSTgraph = copyGraphFromEdges(G0, MST);
+    SubGraph MSTgraph = constructFromMST(G0, MST);
     write_graphviz(fs, MSTgraph);
 
     //write_graphviz(fs, G0);
+
+    fs.close();
+}
+
+int main()
+{
+    using namespace boost;
+    //graphTest();
+
+    std::fstream fs;
+
+    fs.open(filename, std::fstream::out);
+
+    std::string jsonfile = "../../.cache_money/graph.json";
+    SubGraph g = constructGraph(jsonfile);
+
+    std::vector<edge_t> MST;
+    kruskal_minimum_spanning_tree(g, std::back_inserter(MST));
+
+    SubGraph MSTgraph = constructFromMST(g, MST);
+
+    write_graphviz(fs, MSTgraph);
 
     fs.close();
 
