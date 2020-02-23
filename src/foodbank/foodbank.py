@@ -5,6 +5,7 @@ import json
 import random
 import warnings
 
+
 load_dotenv(verbose=True)
 gmaps = googlemaps.Client(key=os.getenv("API_KEY"))
 
@@ -17,15 +18,16 @@ class Node:
 
     name = "NoName"
     edges = {}
+    weight = random.randint(0, 10)
 
     def __init__(self, name):
         self.name = name
 
     def append_vertex(self, distance: float, vertex):
-        self.edges[vertex] = distance
+        self.edges[vertex] = {"edge_weight" : distance}
 
     def to_json(self, json: dict):
-        json[self.name] = self.edges
+        json[self.name] = {"edges" : self.edges, "vertex_weight" : self.weight}
 
 
 class DistanceMatrix:

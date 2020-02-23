@@ -9,8 +9,8 @@
 #   -v postgres:/var/lib/postgresql/data \
 #   --net postgres_backend \
 #   postgres:9.6
-docker-compose up -d
+# docker-compose up -d
 
 IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' database_db_1)
 
-python3 fake_data.py -b 1 -i $IP
+python3 test.py -i $IP
