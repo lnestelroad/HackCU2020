@@ -14,8 +14,8 @@ if __name__ == '__main__':
     db_parse_to_json(args["ip"])
     
     
-
-    
+    #
+    #
     #  DM = DistanceMatrix()
     #
     #
