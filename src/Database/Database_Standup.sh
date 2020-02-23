@@ -13,8 +13,4 @@ docker-compose up -d
 
 IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' database_db_1)
 
-<<<<<<< HEAD
 python3 fake_data.py -b 1 -i $IP
-=======
-python3 fake_data.py -b 1 -i $IP
->>>>>>> master
