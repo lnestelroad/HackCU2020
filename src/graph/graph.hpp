@@ -53,3 +53,5 @@ SubGraph constructFromMST(SubGraph &parent, const std::vector<edge_t> &edges);
 // Adds vertices to a subgraph
 void appendSubgraph(SubGraph &graph, const std::vector<vertex_t> &vertices);
 //void writeGraph(const Graph &)
+
+json preorderTraversal(const SubGraph &graph);

@@ -1,6 +1,7 @@
 #include "graph.hpp"
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
 #include <fstream>
+#include <stack>
 
 const static std::string filename{"viz.dot"};
 
@@ -21,6 +22,7 @@ SubGraph constructGraph(const std::string &jsonfile)
         // Initializing full graph
         vertex_t new_vert = add_vertex(g);
         put(vertex_name, g, new_vert, it.key());
+        //std::cout << "adding vertex: " << get(get(vertex_name, g), new_vert) << "\n";
         nameMap[it.key()] = new_vert;
     }
     for (json::iterator it = j.begin(); it != j.end(); ++it)
@@ -29,6 +31,7 @@ SubGraph constructGraph(const std::string &jsonfile)
         {
             if (nameMap.find(it2.key()) == nameMap.end())
             {
+                std::cout << "shouldn't be here\n";
                 vertex_t new_vert = add_vertex(g);
                 put(vertex_name, g, new_vert, it2.key());
                 nameMap[it2.key()] = new_vert;
@@ -95,8 +98,8 @@ SubGraph constructFromMST(SubGraph &parent, const std::vector<edge_t> &edges)
         vertex_t src = source(ed, parent);
         vertex_t dest = target(ed, parent);
 
-        //put(vertex_name, g, src, get(get(vertex_name, parent), src));
-        //put(vertex_name, g, dest, get(get(vertex_name, parent), dest));
+        put(vertex_name, g, src, get(get(vertex_name, parent), src));
+        put(vertex_name, g, dest, get(get(vertex_name, parent), dest));
 
         add_edge(src, dest, get(get(edge_weight, parent), ed), g);
     }
@@ -172,6 +175,40 @@ void graphTest()
     fs.close();
 }
 
+json preorderTraversal(const SubGraph &graph)
+{
+    using namespace boost;
+    std::vector<bool> visited(num_vertices(graph), false);
+
+    std::stack<vertex_t> stack;
+    auto [begin, end] = vertices(graph);
+    stack.push(*begin);
+
+    json out;
+
+    while (!stack.empty())
+    {
+        vertex_t vert = stack.top();
+        stack.pop();
+
+        if (!visited[vert])
+        {
+            out.push_back(get(get(vertex_name, graph), vert));
+
+            auto [begin, end] = adjacent_vertices(vert, graph);
+            for (; begin != end; begin++)
+            {
+                if (!visited[*begin])
+                {
+                    stack.push(*begin);
+                }
+            }
+            visited[vert] = true;
+        }
+    }
+    return out;
+}
+
 int main()
 {
     using namespace boost;
@@ -188,7 +225,9 @@ int main()
     kruskal_minimum_spanning_tree(g, std::back_inserter(MST));
 
     SubGraph MSTgraph = constructFromMST(g, MST);
-
+    json output;
+    output.push_back(preorderTraversal(MSTgraph));
+    std::cout << output << std::endl;
     write_graphviz(fs, g);
 
     fs.close();
