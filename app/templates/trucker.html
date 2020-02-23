@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <hr>
+    <h2>Source</h2>
+    {% for src in source %}
+    <p>
+        {{ src }}
+        </b>
+    </p>
+    {% endfor %}
+    <h2>Sink</h2>
+    {% for src in sink %}
+    <p>
+        {{ src }}
+        </b>
+    </p>
+    {% endfor %}
+    <h2>Connect</h2>
+    {% for src in connect %}
+    <p>
+        {{ src }}
+        </b>
+    </p>
+    {% endfor %}
+{% endblock %}
