@@ -13,21 +13,25 @@ gmaps = googlemaps.Client(key=os.getenv("API_KEY"))
 DEFAULT_CACHE="./.cache_money/addresses.json"
 MAX_CACHED=100
 
+SINK=0
+SOURCE=1
+
 class Node:
-    def __init__(self, name):
+    def __init__(self, name, type_):
         self.name = "NoName"
         self.edges = {}
         self.weight = random.randint(0, 10)
         self.name = name
+        self.type = type_
 
-    def append_vertex(self, distance: float, vertex):
+    def append_vertex(self, distance: float, vertex, type_):
         self.edges[vertex] = {"edge_weight" : distance}
 
     def to_json(self, json: dict):
         if self.name in json:
             raise Exception("Error, name already exists")
 
-        json[self.name] = {"vertex_weight" : self.weight, "edges" : self.edges}
+        json[self.name] = {"type" : self.type, "vertex_weight" : self.weight, "edges" : self.edges}
 
 class DistanceMatrix:
     
@@ -55,7 +59,7 @@ class DistanceMatrix:
             node = Node(origins[i])
             for j in range(len(rows[i]["elements"])):
                 node.append_vertex(rows[i]["elements"][j]["duration"]["value"], dests[j])
-            self.nodes[origins[i]] = {"vertex_weight" : node.weight, "edges" : node.edges}
+            self.nodes[origins[i]] = {"type" : self.type, "vertex_weight" : node.weight, "edges" : node.edges}
 
 
     def to_json_file(self, file_name):
