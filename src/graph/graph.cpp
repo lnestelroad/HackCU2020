@@ -526,8 +526,9 @@ int main()
     std::cout << "Source: " << sourceVec.size() << "\nSink: \n"
               << sinkVec.size();
 
-    json outJson = constructRoute(graphVec);
-    std::cout << outJson << std::endl;
+    json outJson;
+    //json outJson = constructRoute(graphVec);
+    //std::cout << outJson << std::endl;
     //write_graphviz(fs, MSTsinkGraph);
 
     SubGraph finalGraph{};
@@ -610,6 +611,8 @@ int main()
         std::cout << "SINK SIZE: " << num_vertices(big_boys[2]) << "\nEDGES: " << num_edges(big_boys[2]) << "\n";
         json newOutJson = constructRoute(big_boys);
         std::cout << newOutJson << std::endl;
+
+        outJson[std::to_string(i)] = newOutJson;
     }
 
     std::cout << "overall stops: " << num_edges(finalGraph) << "\n";
