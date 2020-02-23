@@ -171,8 +171,12 @@ class Database():
 
         return food_entries
 
-    def getAddresses(self):
+    def getResterauntAddresses(self):
         self.cursor.execute("SELECT Address FROM Restaurant;")
+        return self.cursor.fetchall()
+
+    def getDonationCenterAddresses(self):
+        self.cursor.execute("SELECT Address FROM Donation_Center;")
         return self.cursor.fetchall()
     
     def getAmount(self, foodID):

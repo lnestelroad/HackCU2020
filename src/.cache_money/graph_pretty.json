@@ -1,0 +1,389 @@
+{
+    "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 0
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 447
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 197
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 578
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 369
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 501
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 972
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 574
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 863
+            }
+        }
+    },
+    "900 Baseline Rd, Boulder, CO 80302, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 290
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 0
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 435
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 474
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 228
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 687
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 1001
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 813
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 785
+            }
+        }
+    },
+    "4800 Baseline Rd, Boulder, CO 80303, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 246
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 473
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 0
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 394
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 395
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 393
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 775
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 377
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 736
+            }
+        }
+    },
+    "673 S Broadway, Boulder, CO 80305, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 353
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 462
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 418
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 0
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 296
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 751
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 914
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 735
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 1044
+            }
+        }
+    },
+    "2400 Baseline Rd, Boulder, CO 80305, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 120
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 358
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 266
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 389
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 0
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 518
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 831
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 643
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 811
+            }
+        }
+    },
+    "2960 Valmont Rd, Boulder, CO 80301, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 513
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 634
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 425
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 693
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 565
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 0
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 1074
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 471
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 376
+            }
+        }
+    },
+    "650 S Taylor Ave, Louisville, CO 80027, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 817
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 1056
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 901
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 1006
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 979
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 1115
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 0
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 1107
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 1442
+            }
+        }
+    },
+    "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 630
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 822
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 509
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 777
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 753
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 483
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 1132
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 0
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 827
+            }
+        }
+    },
+    "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+    {
+        "vertex_weight": 5,
+        "edges":
+        {
+            "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 820
+            },
+            "900 Baseline Rd, Boulder, CO 80302, USA":
+            {
+                "edge_weight": 801
+            },
+            "4800 Baseline Rd, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 769
+            },
+            "673 S Broadway, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 1060
+            },
+            "2400 Baseline Rd, Boulder, CO 80305, USA":
+            {
+                "edge_weight": 890
+            },
+            "2960 Valmont Rd, Boulder, CO 80301, USA":
+            {
+                "edge_weight": 422
+            },
+            "650 S Taylor Ave, Louisville, CO 80027, USA":
+            {
+                "edge_weight": 1466
+            },
+            "5749 Arapahoe Ave, Boulder, CO 80303, USA":
+            {
+                "edge_weight": 815
+            },
+            "1575 Yarmouth Ave, Boulder, CO 80304, USA":
+            {
+                "edge_weight": 0
+            }
+        }
+    }
+}
