@@ -24,7 +24,7 @@ class Node:
         self.name = name
         self.type = type_
 
-    def append_vertex(self, distance: float, vertex, type_):
+    def append_vertex(self, distance: float, vertex):
         self.edges[vertex] = {"edge_weight" : distance}
 
     def to_json(self, json: dict):
@@ -54,12 +54,16 @@ class DistanceMatrix:
         origins = dm["origin_addresses"]
         dests = dm["destination_addresses"]
         rows = dm["rows"]
+        origins_self = dict({i.address : i.type for i in self.destinations}, **{i.address : i.type for i in self.origins})
+
+        
         
         for i in range(len(origins)):
-            node = Node(origins[i])
+            node = Node(origins[i], origins_self[origins[i]])
+            print(origins_self[origins[i]])
             for j in range(len(rows[i]["elements"])):
                 node.append_vertex(rows[i]["elements"][j]["duration"]["value"], dests[j])
-            self.nodes[origins[i]] = {"type" : self.type, "vertex_weight" : node.weight, "edges" : node.edges}
+            self.nodes[origins[i]] = {"type" : node.type, "vertex_weight" : node.weight, "edges" : node.edges}
 
 
     def to_json_file(self, file_name):
@@ -101,12 +105,12 @@ class DistanceMatrix:
 
     def push_destination(self, address, cache_file=None, identification=None):
         self.ready = False
-        address_node = AddressNode(address, cache_file, identification)
+        address_node = AddressNode(address = address, type_=SINK, cache_file = cache_file, identification = identification)
         self.destinations.append(address_node)
 
     def push_origin(self, address, cache_file=None, identification=None):
         self.ready = False
-        address_node = AddressNode(address, cache_file, identification)
+        address_node = AddressNode(address = address, type_ = SOURCE, cache_file = cache_file, identification = identification)
         self.origins.append(address_node)
 
     def remove_destination(self, identification):
@@ -147,9 +151,11 @@ class AddressNode:
     # @param address The address (In arbitrary terms think google worthy)
     # @param cache_file An optional cache file to cache queries
     # @param identification The identification value for the cached data
-    def __init__(self, address:str=None, cache_file:str=None, identification:str=None):
+    def __init__(self, type_, address:str=None, cache_file:str=None, identification:str=None):
 
        
+        self.type = type_
+
         if cache_file is not None:
 
             # An id is required for cached data
