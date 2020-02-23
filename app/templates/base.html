@@ -1,83 +1,78 @@
 <html lang="en">
-    <head>
-        {% if title %}
-        <title>{{title}} - Consume</title>
-        {% else %}
-        <title>Welcome to Consume</title>
-        {% endif %}
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial=scale=1">
+<head>
+    {% if title %}
+    <title>{{title}} - Consume</title>
+    {% else %}
+    <title>Welcome to Consume</title>
+    {% endif %}
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial=scale=1">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        {% block head %}
-        {% endblock %}
-    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
-    <body>
-                <nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top" data-toggle="collapse">
+    {% block head %}
+    {% endblock %}
+</head>
 
-                        <a class="navbar-brand" href="#">Consume</a>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top" data-toggle="collapse"
+        style="background-color: limegreen;">
 
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+        <a class="navbar-brand" href="#">Consume</a>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                                <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                                        <li class="nav-item">
-                                                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-                                        </li>
+            <ul class="navbar-nav mr-auto">
 
-                                        {% if current_user.is_anonymous %}
-                                        <li class="nav-item">
-                                                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                                        </li>
-                                        {% else %}
-                                        <li class="nav-item">
-                                                <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-                                        </li>
-                                        <li class="nav-item">
-                                                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                                        </li>
-                                        {% endif %}
-                                </ul>
-                        </div>
-                </nav>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
 
-        <!-- <div>Consume: -->
-        <!--     <a href="{{ url_for('index') }}">Home</a> -->
-        <!--     {% if current_user.is_anonymous %} -->
-        <!--     <a href="{{ url_for('login') }}">Login</a> -->
-        <!--     {% else %} -->
-        <!--     <a href="{{ url_for('user', username=current_user.username) }}">Profile</a> -->
-        <!--     <a href="{{ url_for('logout') }}">Logout</a> -->
-        <!--     {% endif %} -->
-        <!-- </div> -->
-        <hr>
-        {% with messages = get_flashed_messages() %}
-
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{message}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-
-        <main>
+                {% if current_user.is_anonymous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <main>
+        <div class="container">
+            <div id="content">
                 {% block content %}
                 {% endblock %}
-        </main>
+            </div>
+        </div>
 
-    </body>
+    </main>
+</body>
+
 </html>

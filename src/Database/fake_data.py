@@ -4,18 +4,11 @@ import db_interface as db
 import argparse
 
  # construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-b", "--build", required=True, type=int, default=0,
-    help="Tells the code whether to make new tables of keep the existing ones")
-ap.add_argument("-i", "--ip", required=True, type=str, default="172.22.0.2",
-    help="Tells the code what the database's IP address is.")
-args = vars(ap.parse_args())
-
 print ("Hello, World!")
 
 # Database add check
 interface = db.Database()
-interface.connectToDatabase(args["ip"])
+interface.connectToDatabase()
 
 interface.Destroy()
 interface.setupTables()
