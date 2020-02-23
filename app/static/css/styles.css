@@ -74,11 +74,15 @@ img {
 }
 
 .green-theme {
-    background-color: #8BFF33;
+    background-color: #8BFF33 !important;
 }
 
 .bg-light {
-    background-color: #8BFF33;
+    background-color: #8BFF33 !important;
+}
+
+.lime-green {
+    background-color: limegreen;
 }
 
 /*a large item has large upper and lower padding*/
