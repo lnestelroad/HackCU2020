@@ -18,7 +18,7 @@ class Database():
         self.cursor = None
 
 ################## Database Configuration #####################################
-    def connectToDatabase(self):
+    def connectToDatabase(self, IP):
         """
             Summary: Here is where python makes a connection with the database file. If no connection can 
                 be made, the file errors out.
@@ -30,7 +30,7 @@ class Database():
             self.path = os.path.dirname(os.path.abspath(__file__))
 
             # Create a connection to the database
-            self.cxn = psql.connect(host="172.22.0.2",database="HackCU", user="Liam", password="liam")
+            self.cxn = psql.connect(host=IP,database="HackCU", user="Liam", password="liam")
             print("Opening Connections to database")
 
             # Create a cursor from the database connection
@@ -229,14 +229,16 @@ def main():
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-b", "--build", required=True, type=int, default=0,
-        help="path to serialized db of facial encodings")
+        help="Tells the code whether to make new tables of keep the existing ones")
+    ap.add_argument("-i", "--ip", required=True, type=str, default="172.22.0.2",
+        help="Tells the code what the database's IP address is.")
     args = vars(ap.parse_args())
 
     print ("Hello, World!")
 
     # Database add check
     interface = Database()
-    interface.connectToDatabase()
+    interface.connectToDatabase(args["ip"])
 
     # checks to see if flag was tripped
     if args["build"] == 1:
