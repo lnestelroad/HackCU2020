@@ -17,6 +17,9 @@ print ("Hello, World!")
 interface = db.Database()
 interface.connectToDatabase(args["ip"])
 
+interface.Destroy()
+interface.setupTables()
+
 interface.addRestaurant("Carelli's", "645 30th St, Boulder, CO 80303")
 interface.addRestaurant("Cosmo's Pizza", "659 30th St, Boulder, CO 80303")
 interface.addRestaurant("May Wah", "2500 Baseline Rd, Boulder, CO 80305")
@@ -32,3 +35,9 @@ interface.addRestaurant("Chautauqua Dining Hall", "900 Baseline Rd, Boulder, CO 
 interface.addRestaurant("Hot Pot Noodle House", "4800 Baseline Rd, Boulder, CO 80303")
 interface.addRestaurant("South Side Walnut Cafe", "673 S Broadway St, Boulder, CO 80305")
 interface.addRestaurant("Starbucks", "2400 Baseline Rd, Boulder, CO 80305")
+interface.addDonationCenter("Harvest of Hope", "2960 Valmont Rd, Boulder, CO 80301", 100, 10)
+interface.addDonationCenter("Community Food Share", "650 S Taylor Ave, Louisville, CO 80027", 100, 10)
+interface.addDonationCenter("Boulder Food Rescue", "5749 Arapahoe Ave, Boulder, CO 80303", 100, 10)
+interface.addDonationCenter("Emergency Family Assistance Association", "1575 Yarmouth Ave, Boulder, CO 80304", 100, 10)
+
+
