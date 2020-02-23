@@ -4,6 +4,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
+from src.foodbank import parse_from_json
 
 
 @app.route('/')
@@ -72,3 +73,45 @@ def user(username):
         {"author": user, "body": "Test post #2"}
     ]
     return render_template("user.html", user=user, posts=posts)
+
+
+
+@app.route("/truck_path")
+def truck_path():
+    source, sink, connect = parse_from_json()
+
+    return render_template("trucker.html", source = source, sink = sink, connect = connect)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

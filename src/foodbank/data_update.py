@@ -1,5 +1,6 @@
-from Database import Database
-from foodbank import DistanceMatrix
+from src.Database import Database
+from src.foodbank import DistanceMatrix
+import json
 
 def db_parse_to_json(ip):
 
@@ -20,5 +21,14 @@ def db_parse_to_json(ip):
         DM.push(i[0], identification=i[0], d_type='d')
 
     DM.to_json_file("./.cache_money/graph.json")
-    
-    
+
+
+def parse_from_json():
+    with open("./.cache_money/truck_paths.json", "r+") as fp:
+        data = json.load(fp)
+
+    #  print(data["connect"])
+    #  print(data["source"])
+    #  print(data["sink"])
+
+    return data
