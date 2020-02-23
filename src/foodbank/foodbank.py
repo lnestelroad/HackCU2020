@@ -24,7 +24,7 @@ class Node:
         self.name = name
         self.type = type_
 
-    def append_vertex(self, distance: float, vertex, type_):
+    def append_vertex(self, distance: float, vertex):
         self.edges[vertex] = {"edge_weight" : distance}
 
     def to_json(self, json: dict):
@@ -54,12 +54,16 @@ class DistanceMatrix:
         origins = dm["origin_addresses"]
         dests = dm["destination_addresses"]
         rows = dm["rows"]
+        origins_self = dict({i.address : i.type for i in self.destinations}, **{i.address : i.type for i in self.origins})
+
+        
         
         for i in range(len(origins)):
-            node = Node(origins[i])
+            node = Node(origins[i], origins_self[origins[i]])
+            print(origins_self[origins[i]])
             for j in range(len(rows[i]["elements"])):
                 node.append_vertex(rows[i]["elements"][j]["duration"]["value"], dests[j])
-            self.nodes[origins[i]] = {"type" : self.type, "vertex_weight" : node.weight, "edges" : node.edges}
+            self.nodes[origins[i]] = {"type" : node.type, "vertex_weight" : node.weight, "edges" : node.edges}
 
 
     def to_json_file(self, file_name):
@@ -68,18 +72,44 @@ class DistanceMatrix:
             json.dump(self.nodes, fp)
 
     def query(self):
-        if not self.ready:
-            origin_endpoints = [i.address for i in self.origins]
-            destination_endpoints = [i.address for i in self.destinations]
+        origin_endpoints = [i.address for i in self.origins]
+        destination_endpoints = [i.address for i in self.destinations]
+        #
+        #  self.json = dict({i.address : {"type" : i.type, "vertex_weight" : random.randint(0, 10), "edges" : {}} for i in self.destinations},
+        #                 **{i.address : {"type" : i.type, "vertex_weight" : random.randint(0, 10), "edges" : {}} for i in self.origins})
+        #
+        #  CHUNKS = 20
+        #
+        #  total = origin_endpoints + destination_endpoints
+        #
+        #  subarrays = [total[i * CHUNKS: i*CHUNKS + CHUNKS] for i in range(int(len(total) / CHUNKS) + 1)]
+        #  subsubarrays = [i[0:CHUNKS /
+        #
+        #
+        #  for i in subarrays:
+        #      join(i[0:CHUNKS / 2], i[CHUNKS / 2:])
+        #
+        #  for i in
+        #
+        #
+        #
+        #
+        #
+        #  self.json = {}
+    #
+        #  total = origin_endpoints + destination_endpoints
+    #
+        #  for i in
+        #
+        #
+        #
+        #
 
-            total = origin_endpoints + destination_endpoints
-            resp = gmaps.distance_matrix(origins = total, destinations = total)
-            self.parse_distance_matrix(resp)
+        total = origin_endpoints + destination_endpoints
+        resp = gmaps.distance_matrix(origins = total, destinations = total)
+        self.parse_distance_matrix(resp)
             
-        else:
-            print("nothing to do")
 
-        ready = True
 
     def push(self, address, identification, cache_file=DEFAULT_CACHE, d_type='d'):
         self.ready = False
@@ -101,12 +131,12 @@ class DistanceMatrix:
 
     def push_destination(self, address, cache_file=None, identification=None):
         self.ready = False
-        address_node = AddressNode(address, cache_file, identification)
+        address_node = AddressNode(address = address, type_=SINK, cache_file = cache_file, identification = identification)
         self.destinations.append(address_node)
 
     def push_origin(self, address, cache_file=None, identification=None):
         self.ready = False
-        address_node = AddressNode(address, cache_file, identification)
+        address_node = AddressNode(address = address, type_ = SOURCE, cache_file = cache_file, identification = identification)
         self.origins.append(address_node)
 
     def remove_destination(self, identification):
@@ -147,9 +177,11 @@ class AddressNode:
     # @param address The address (In arbitrary terms think google worthy)
     # @param cache_file An optional cache file to cache queries
     # @param identification The identification value for the cached data
-    def __init__(self, address:str=None, cache_file:str=None, identification:str=None):
+    def __init__(self, type_, address:str=None, cache_file:str=None, identification:str=None):
 
        
+        self.type = type_
+
         if cache_file is not None:
 
             # An id is required for cached data
