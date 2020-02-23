@@ -58,3 +58,6 @@ json preorderTraversal(const SubGraph &graph);
 
 edge_t findConnectingEdge(const SubGraph &graph);
 //edge_t findMinEdge(std::pair<boost::vertex_iterator, boost::vertex_iterator> group1, std::pair<boost::vertex_iterator, boost::vertex_iterator> group2);
+
+// Vector of three elements, main, source, and sink. Returns truck route to traverse source then sink
+json constructRoute(std::vector<SubGraph> &graphs);

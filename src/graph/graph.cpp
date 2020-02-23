@@ -301,24 +301,14 @@ edge_t findConnectingEdge(const SubGraph &graph)
     return lowest_edge;
 }
 
-int main()
+json constructRoute(std::vector<SubGraph> &graphs)
 {
     using namespace boost;
-    //graphTest();
 
-    std::fstream fs;
-
-    fs.open(filename, std::fstream::out);
-
-    std::string jsonfile = "../../.cache_money/graph.json";
     SubGraph g, src, sink;
-
-    std::vector<SubGraph> graphVec = constructGraph(jsonfile);
-    g = graphVec[0];
-    src = graphVec[1];
-    sink = graphVec[2];
-
-    std::cout << "Graph size: " << num_vertices(g) << "\nSource size: " << num_vertices(src) << "\nSink size: " << num_vertices(sink) << std::endl;
+    g = graphs[0];
+    src = graphs[1];
+    sink = graphs[2];
 
     std::vector<edge_t> MST;
     kruskal_minimum_spanning_tree(g, std::back_inserter(MST));
@@ -337,8 +327,6 @@ int main()
     vertex_t c1 = source(connecting, g);
     vertex_t c2 = target(connecting, g);
 
-    std::cout << "connecting edge: (" << get(get(vertex_name, g), c1) << "   ->    " << get(get(vertex_name, g), c2) << "\n";
-
     json output;
     json srcTraversal = preorderTraversal(MSTsrcGraph);
     json sinkTraversal = preorderTraversal(MSTsinkGraph);
@@ -348,15 +336,25 @@ int main()
     output["connect"] = connect;
     output["sink"] = sinkTraversal;
 
-    //output.push_back(srcTraversal + connect + sinkTraversal);
-    /*
-    output.push_back(preorderTraversal(MSTgraph));
-    output.push_back(preorderTraversal(MSTsrcGraph));
-    output.push_back(preorderTraversal(MSTsinkGraph));
-    */
+    return output;
+}
 
-    std::cout << output << std::endl;
-    write_graphviz(fs, MSTsinkGraph);
+int main()
+{
+    using namespace boost;
+    //graphTest();
+
+    std::fstream fs;
+
+    fs.open(filename, std::fstream::out);
+
+    std::string jsonfile = "../../.cache_money/graph.json";
+    SubGraph g, src, sink;
+
+    std::vector<SubGraph> graphVec = constructGraph(jsonfile);
+
+    std::cout << constructRoute(graphVec) << std::endl;
+    //write_graphviz(fs, MSTsinkGraph);
 
     fs.close();
 
