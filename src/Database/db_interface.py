@@ -4,6 +4,7 @@ import os
 import psycopg2 as psql
 import argparse
 import datetime
+import json
 
 class Database():
     def __init__(self):
@@ -11,12 +12,12 @@ class Database():
         self.cursor = None
 
 ################## Database Configuration #####################################
-    def connectToDatabase(self, IP):
+    def connectToDatabase(self):
         try:
             self.path = os.path.dirname(os.path.abspath(__file__))
 
             # Create a connection to the database
-            self.cxn = psql.connect(host=IP,database="HackCU", user="Liam", password="liam")
+            self.cxn = psql.connect(host="172.26.0.2",database="HackCU", user="Liam", password="liam")
             print("Opening Connections to database")
 
             # Create a cursor from the database connection
@@ -130,12 +131,12 @@ class Database():
         self.commitChanges()
 
     def addDonation(self, _foodName, _donationCenterName, _amount, _dateAdded):
-        # self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
-        # foodID = self.cursor.fetchone()
-        foodID = _foodName
-        donationCenterID = _donationCenterName
-        # self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
-        # donationCenterID = self.cursor.fetchone()
+        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        foodID = self.cursor.fetchone()
+        # foodID = _foodName
+        # donationCenterID = _donationCenterName
+        self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
+        donationCenterID = self.cursor.fetchone()
 
         self.cursor.execute("INSERT INTO Donations (FoodID, DonationCenterID, QuantityDonated, DateDonated) \
             VALUES (%s, %s, %s, %s);", (foodID, donationCenterID, _amount, _dateAdded))
@@ -149,13 +150,13 @@ class Database():
         self.commitChanges()
 
     def addFoodAmount(self, _foodName, _donationCenterName, _amount):
-        # self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
-        # donationCenterID = self.cursor.fetchall()
+        self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
+        donationCenterID = self.cursor.fetchall()
 
-        # self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
-        # foodID = self.cursor.fetchall()
-        foodID = _foodName
-        donationCenterID = _donationCenterName
+        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        foodID = self.cursor.fetchall()
+        # foodID = _foodName
+        # donationCenterID = _donationCenterName
 
         self.cursor.execute("INSERT INTO FoodAmount (FoodID, DonationCenterID, Amount) \
             VALUES (%s, %s, %s)", (foodID, donationCenterID, _amount))
@@ -183,12 +184,28 @@ class Database():
         self.cursor.execute("SELECT Amount FROM FoodAmount WHERE foodID = %s", (foodID,))
         return self.cursor.fetchone()
 
-    def updateAmount(self, foodID, additional):
+    def updateAmount(self, _foodName, additional):
+
+        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        foodID = self.cursor.fetchone()
+
+
         self.cursor.execute("UPDATE FoodAmount SET Amount=Amount + %s WHERE foodID = %s;", (additional, foodID))
         self.commitChanges()
 
+    def getRestaurantFood(self, restaurantName):
+        self.cursor.execute("SELECT RestaurantID FROM Restaurant WHERE RestaurantName LIKE %s", (restaurantName,))
+        restaurantID = self.cursor.fetchone()
+
+        self.cursor.execute("SELECT * FROM foods WHERE restaurantID = %s", (restaurantID,))
+        return json.dumps(self.cursor.fetchall())
+
+
 #################### Database removal #########################################
     def removeFood(self, _foodName):
+        # self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        # foodID = self.cursor.fetchone()
+
         self.cursor.execute("DELETE FROM Foods WHERE FoodName = %s;", (_foodName,))
         self.commitChanges()
     
@@ -208,8 +225,11 @@ class Database():
         self.cursor.execute("DELETE FROM FoodAmount WHERE AmountsID = %s;", (_foodAmount,))
         self.commitChanges()
         
-    def inFoodAmountTable(self, _foodID):
-        self.cursor.execute("SELECT * FROM FoodAmount WHERE foodid = %s;", (_foodID,))
+    def inFoodAmountTable(self, _foodName):
+        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        foodID = self.cursor.fetchone()
+
+        self.cursor.execute("SELECT * FROM FoodAmount WHERE foodid = %s;", (foodID,))
         if self.cursor.fetchone() == None:
             return False
         else:
@@ -232,7 +252,7 @@ def main():
 
     # Database add check
     interface = Database()
-    interface.connectToDatabase(args["ip"])
+    interface.connectToDatabase()
 
     # checks to see if flag was tripped
     if args["build"] == 1:

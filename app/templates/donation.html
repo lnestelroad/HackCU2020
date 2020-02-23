@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/css/donation.css">
+<script src="../static/js/donation.js"></script>
+     <div class=container id=donation>
+        <div class=jumbotron>
+            <h1 >Donations Form</h1>
+            <p>Thank you for your donation. Please make sure all of the information is filled out correctly below</p>
+        </div>
+        <div class=row>
+            <div class="list-group" id="myList" role="tablist">
+                <!-- <a class="list-group-item list-group-item-action" id="food" onclick="select('food')" role="tab">Home</a> -->
+                {% for food in data %}
+                    <a class="list-group-item list-group-item-action" id="{{ food[1] }}" onclick="select(`{{ food[1] }}`, `{{ food[2] }}`, `{{ food[3] }}`, `{{ food[4] }}`)" role="tab">{{ food[1] }}</a>
+                {% endfor %}
+            </div>
+            <div class=form>
+                <form action="/send" method="POST">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputFoodName">Food Name</label>
+                            <input type="text" class="form-control" id="why" placeholder="Name" value="" name="foodname">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputToodType">Food Type</label>
+                            <select id="foodtype" class="form-control">
+                                <option selected>Hot</option>
+                                <option>Cold</option>
+                                <option>Boxed</option>
+                                <option>Drink</option>
+                                <option>Can</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputShelfLife">Shelf Life(in days)</label>
+                        <input type="text" class="form-control" id="inputAddress" placeholder="Days" value="" name="life">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputFoodName">Amount</label>
+                            <input type="text" class="form-control" id="why" placeholder="Name" value="" name="amount">
+                        </div>
+                        <div class="form-check">
+                            <input style="vertical-align: middle" class="form-check-input" type="radio" name="gridRadios" id="isParish" value="True" checked>
+                            <label class="form-check-label" for="parishables">
+                                Perishable
+                            </label>
+                        </div>
+                        
+                    </div>
+                    <input type="submit">Donate!</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            function select(name_id, type, life, perish) {
+                id = document.getElementById("why")
+                id.value = name_id
+
+                type = document.getElementById("inputAddress");
+                type.value = life;
+                
+            }
+        </script>
+        
+    </div>
+{% endblock %}

@@ -5,6 +5,8 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
 from src.foodbank import parse_from_json
+from src.Database import Database
+import json
 
 
 @app.route('/')
@@ -81,36 +83,25 @@ def truck_path():
 
     return render_template("trucker.html", source = source, sink = sink, connect = connect)
 
+@app.route("/send", methods=['POST'])
+def donation():
+    interface = Database()
+    interface.connectToDatabase()
+    food_data = json.loads(interface.getRestaurantFood("Cafe Mexicali"))
 
+    name = request.form['foodname']
+    amount = request.form['amount']
+    
+    if interface.inFoodAmountTable(name) == False:
+        interface.addDonation(name, "Harvest of Hope", amount, "12/12/2019")
+        interface.addFoodAmount(name, "Harvest of Hope", amount)
+    else:
+        interface.updateAmount(name, amount)
+    return render_template("donation.html", data=food_data)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route("/donation")
+def send():
+    interface = Database()
+    interface.connectToDatabase()
+    food_data = json.loads(interface.getRestaurantFood("Cafe Mexicali"))
+    return render_template("donation.html", data=food_data)
