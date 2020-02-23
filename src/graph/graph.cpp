@@ -1,13 +1,21 @@
 #include "graph.hpp"
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
+#include <string_view>
+#include <fstream>
+
+const static std::string filename{"graphviz.dot"};
 
 int main()
 {
     using namespace boost;
 
+    std::fstream fs;
+
+    fs.open(filename, std::fstream::out);
+
     const int N = 6;
 
-    SubGraph G0(N);
+    SubGraph G0(0);
 
     enum
     {
@@ -34,8 +42,11 @@ int main()
     };
 
     // Add vertices to g1
-
-    add_vertex(C, G1);
+    //vertex_pt vpt = (std::map<std::string, std::string> m{}, "hi");
+    //vertex_t vpt{std::map<std::string, std::string>{}, "HI"};
+    /*
+    vertex_t vert = add_vertex(vpt, G1);
+    
     add_vertex(E, G1);
     add_vertex(F, G1);
 
@@ -50,17 +61,39 @@ int main()
     add_edge(E, B, 2, G0);
     add_edge(E, F, 2, G0);
     add_edge(F, D, 7, G0);
+    */
 
-    std::vector<edge_t> MST;
+    vertex_t u = add_vertex(G0);
+    vertex_t v = add_vertex(G0);
+    add_edge(u, v, 2, G0);
+
+    //G0[u].vertex_name = "hi";
+    put(vertex_name, G0, u, "hi");
+    put(vertex_name, G0, v, "this");
+    //v.name = "hi";
+    //get(get(vertex_name, G0), v);
+    //put(vertex_name, v, "Hello!");
+    //G0[vert].vertex_name = "HI";
+
+    std::vector<edge_t>
+        MST;
+
+    std::cout << u << v << std::endl;
 
     kruskal_minimum_spanning_tree(G0, std::back_inserter(MST));
 
     for (const auto &ed : MST)
     {
+        vertex_t src = source(ed, G0);
+        vertex_t dest = target(ed, G0);
+        std::cout << get(get(vertex_name, G0), src) << "\n";
+        std::cout << get(get(vertex_name, G0), dest) << "\n";
         std::cout << get(get(edge_weight, G0), ed) << "\n";
     }
 
-    write_graphviz(std::cout, G0);
+    write_graphviz(fs, G0);
+
+    fs.close();
 
     return 0;
 }

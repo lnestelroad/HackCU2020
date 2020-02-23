@@ -7,6 +7,7 @@
 
 struct Vertex
 {
+    std::string name;
     int weight;
 };
 
@@ -34,7 +35,7 @@ typedef boost::property<boost::edge_weight_t, int, boost::property<boost::edge_i
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS,
                                     boost::undirectedS,
-                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, Vertex>,
+                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, boost::property<boost::vertex_name_t, std::string>>,
                                     EdgeProperty,
                                     boost::property<boost::graph_name_t, std::string,
                                                     boost::property<boost::graph_graph_attribute_t, GraphvizAttributes,
@@ -54,8 +55,13 @@ using Graph = boost::adjacency_list<boost::vecS, boost::vecS,
 typedef boost::subgraph<Graph>
     SubGraph;
 
+//typedef boost::named_graph<SubGraph> NamedSubGraph;
+
 using edge_t = boost::graph_traits<SubGraph>::edge_descriptor;
-using vertex_t = boost::graph_traits<SubGraph>::vertex_descriptor;
+//using vertex_t = boost::graph_traits<SubGraph>::vertex_descriptor;
+using vertex_t = SubGraph::vertex_descriptor;
+using vertex_pt = SubGraph::vertex_property_type;
+
 //boost::property_map<SubGraph, boost::edge_weight_t>::type weight = get
 //using edgeid_map = boost::property_map<SubGraph, boost::edge_index_t>::type;
 //edgeid_map edge_id = boost::get(edge_index, G);
