@@ -5,6 +5,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
 from src.foodbank import parse_from_json
+import subprocess
 
 
 @app.route('/')
@@ -77,9 +78,9 @@ def user(username):
 
 @app.route("/truck_path")
 def truck_path():
-    source, sink, connect = parse_from_json()
-
-    return render_template("trucker.html", source = source, sink = sink, connect = connect)
+    subprocess.call("./update_cache.sh")
+    data = parse_from_json()
+    return render_template("trucker.html", data = data)
 
 
 

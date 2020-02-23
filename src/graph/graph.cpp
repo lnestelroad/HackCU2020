@@ -5,7 +5,7 @@
 #include <stack>
 
 const static std::string filename{"viz.dot"};
-const static std::string outfile{"../../.cache_money/truck_paths.json"};
+const static std::string outfile{"./.cache_money/truck_paths.json"};
 
 constexpr int NUM_TRUCKS{3};
 
@@ -517,7 +517,7 @@ int main()
     fs.open(filename, std::fstream::out);
     out.open(outfile, std::fstream::out);
 
-    std::string jsonfile = "../../.cache_money/graph.json";
+    std::string jsonfile = "./.cache_money/graph.json";
 
     auto [graphVec, sourceVec, sinkVec] = constructGraph(jsonfile);
 

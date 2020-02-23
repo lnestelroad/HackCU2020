@@ -2,25 +2,67 @@
 
 {% block content %}
     <hr>
-    <h2>Source</h2>
-    {% for src in source %}
-    <p>
-        {{ src }}
-        </b>
-    </p>
-    {% endfor %}
-    <h2>Sink</h2>
-    {% for src in sink %}
-    <p>
-        {{ src }}
-        </b>
-    </p>
-    {% endfor %}
-    <h2>Connect</h2>
-    {% for src in connect %}
-    <p>
-        {{ src }}
-        </b>
-    </p>
-    {% endfor %}
+        
+    <table class="table table-bordered">
+            <thead>
+                    <tr>
+                        <th>Truck Number</th>
+                        <th>Resteraunt Routes</th>
+                        <th>Donation Centers</th>
+                        <th>Connection Destination</th>
+                    </tr>
+            </thead>
+            <tbody>
+                    {% for d in data %}
+                    <tr>
+                        <td><b>{{ d }}</b></td>
+                        <td>
+                                <ul>
+                                {% for src in data[d]["source"] %}
+                                <li>
+                                <p>
+                                        {{ src }}
+                                </p>
+                                </li>
+                                {% endfor %}
+                                </ul>
+                        </td>
+                        <td>
+                                <ul>
+                                {% for src in data[d]["sink"] %}
+                                <li>
+                                <p>
+                                        {{ src }}
+                                </p>
+                                </li>
+                                {% endfor %}
+                                </ul>
+                        </td>
+                        <td>
+                                <ul>
+                                {% for src in data[d]["connect"] %}
+                                <li>
+                                <p>
+                                        {{ src }}
+                                </p>
+                                </li>
+                                {% endfor %}
+                                </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+    </table>
+    <center>
+    <div class="text-centered">
+            <img src="{{ url_for('static', filename='imgs/routes.png') }}">
+    </div>
+    <form action="http://localhost:5000/request_route" method="post">
+            <button type="button" class="btn btn-info">
+                    <input class="btn btn-info" type="submit" value="Generate New Route">
+            </button>
+    </form>
+    </center>
+
+
 {% endblock %}
