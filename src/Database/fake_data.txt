@@ -1,0 +1,20 @@
+Restaurants:
+	interface.addRestaurant("May Wah", "2500 Baseline Rd, Boulder, CO 80305")
+	interface.addRestaurant("Cafe Mexicali", "2850 Baseline Rd, Boulder, CO 80303")
+	interface.addRestaurant("Moe's Original BBQ - Boulder", "675 30th St, Boulder, CO 80303")
+	interface.addRestaurant("Taj Indian Cuisine", "2630 Baseline Rd, Boulder, CO 80305")
+	interface.addRestaurant("Dark Horse", "2922 Baseline Rd, Boulder, CO 80303")
+	interface.addRestaurant("Oregano's Italian Joint", "2690 Baseline Rd, Boulder, CO 80305")
+	interface.addRestaurant("Under The Sun Eatery and Pizzeria", "627 South Broadway Street, Boulder, CO 80305")
+	interface.addRestaurant("Tandoori Grill", "619 S Broadway, Boulder, CO 80305")
+	interface.addRestaurant("Pho Kitchen Bar & Grill", "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303")
+	interface.addRestaurant("Chautauqua Dining Hall", "900 Baseline Rd, Boulder, CO 80302")
+	interface.addRestaurant("Hot Pot Noodle House", "4800 Baseline Rd, Boulder, CO 80303")
+	interface.addRestaurant("South Side Walnut Cafe", "673 S Broadway St, Boulder, CO 80305")
+	interface.addRestaurant("Starbucks", "2400 Baseline Rd, Boulder, CO 80305")
+
+Food Banks:
+	interface.addDonationCenter("Harvest of Hope", "2960 Valmont Rd, Boulder, CO 80301")
+	interface.addDonationCenter("Community Food Share", "650 S Taylor Ave, Louisville, CO 80027")
+	interface.addDonationCenter("Boulder Food Rescue", "5749 Arapahoe Ave, Boulder, CO 80303")
+	interface.addDonationCenter("Emergency Family Assistance Association", "1575 Yarmouth Ave, Boulder, CO 80304")
