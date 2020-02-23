@@ -6,26 +6,12 @@ import argparse
 import datetime
 
 class Database():
-    """
-        Summary: This class is used for interaction with the postgresql database. Since postgresql has nice integration with 
-            python, it is the perfect solution for incorporating a database.
-
-        Inputs:None
-        Outputs: None
-    """
     def __init__(self):
         self.cxn = None
         self.cursor = None
 
 ################## Database Configuration #####################################
     def connectToDatabase(self, IP):
-        """
-            Summary: Here is where python makes a connection with the database file. If no connection can 
-                be made, the file errors out.
-
-            Inputs: None
-            Outputs: A sqlite cursor for interaction with the database.
-        """
         try:
             self.path = os.path.dirname(os.path.abspath(__file__))
 
@@ -40,32 +26,25 @@ class Database():
             print("Error connecting to database. " + str(error))
 
     def setupTables(self):
-        """
-            Summary: Because creating the schema though the command line is a massive pain in the ass, this function will do it for me. 
-                The other benifit is for readability as anyone can now see exactly what was done to make this database.
-
-            Inputs: None
-            Outputs: Initial database
-        """
-
-        # Creates a table for Pictures
-        Food = "CREATE TABLE IF NOT EXISTS Foods( \
-            FoodID SERIAL PRIMARY KEY, \
-            FoodName VARCHAR(100) NOT NULL, \
-            FoodType VARCHAR (100) NOT NULL, \
-            ShelfLife INTEGER, \
-            Present BOOL,\
-			Parishable BOOL \
-            );"
-        self.cursor.execute(Food)
-
-				# Creates a table for Restaurants
+        # Creates a table for Restaurants
         Restaurant = "CREATE TABLE IF NOT EXISTS Restaurant( \
             RestaurantID SERIAL PRIMARY KEY, \
             RestaurantName VARCHAR (100) NOT NULL, \
             Address VARCHAR(100) NOT NULL \
             );"
         self.cursor.execute(Restaurant)
+
+        Food = "CREATE TABLE IF NOT EXISTS Foods( \
+            FoodID SERIAL PRIMARY KEY, \
+            FoodName VARCHAR(100) NOT NULL, \
+            FoodType VARCHAR (100) NOT NULL, \
+            ShelfLife INTEGER, \
+            Present BOOL,\
+			Parishable BOOL, \
+            RestaurantID INTEGER NOT NULL, \
+            FOREIGN KEY(RestaurantID) REFERENCES Restaurant(RestaurantID) \
+            );"
+        self.cursor.execute(Food)
 
         Donation_Center = "CREATE TABLE IF NOT EXISTS Donation_Center( \
             DonationCenterID SERIAL PRIMARY KEY, \
@@ -87,11 +66,9 @@ class Database():
         Donations = "CREATE TABLE IF NOT EXISTS Donations( \
             DonationsID SERIAL PRIMARY KEY, \
             FoodID INTEGER NOT NULL, \
-            RestaurantID INTEGER NOT NULL, \
             DonationCenterID INTEGER NOT NULL, \
             QuantityDonated INTEGER NOT NULL, \
             DateDonated DATE NOT NULL, \
-            FOREIGN KEY(RestaurantID) REFERENCES Restaurant(RestaurantID), \
             FOREIGN KEY(FoodID) REFERENCES Foods(FoodID), \
             FOREIGN KEY(DonationCenterID) REFERENCES Donation_Center(DonationCenterID) \
             );"
@@ -112,21 +89,16 @@ class Database():
         self.commitChanges()
 
     def commitChanges(self):
-        """
-            Summay: This will be used only to commit changes so that its done at specific points rather than after every function call.
-            Input: none
-            Output: none
-        """
         self.cxn.commit()
 
     def Destroy(self):
         """ Destroys the database. For testing pusposes only """
         self.cursor.execute("DROP TABLE IF EXISTS Trucks;")
         self.cursor.execute("DROP TABLE IF EXISTS Donations;")
-        self.cursor.execute("DROP TABLE IF EXISTS Restaurant;")
         self.cursor.execute("DROP TABLE IF EXISTS FoodAmount;")
         self.cursor.execute("DROP TABLE IF EXISTS Donation_Center;")
         self.cursor.execute("DROP TABLE IF EXISTS Foods;")
+        self.cursor.execute("DROP TABLE IF EXISTS Restaurant;")
 
 
         self.commitChanges()
@@ -136,9 +108,12 @@ class Database():
 
 ################### Database inserting ########################################
 
-    def addFood(self, _name, _type, _shelfLife, _parishable, _present):
-        self.cursor.execute("INSERT INTO Foods (foodname, foodtype, shelflife, parishable, present) \
-            VALUES (%s, %s, %s, %s, %s)", (_name, _type, _shelfLife, _parishable, _present))
+    def addFood(self, _name, _type, _shelfLife, _parishable, _present, _restaurantName):
+        self.cursor.execute("SELECT RestaurantID FROM Restaurant WHERE RestaurantName LIKE %s", (_restaurantName,))
+        restaurantID = self.cursor.fetchone()
+
+        self.cursor.execute("INSERT INTO Foods (foodname, foodtype, shelflife, parishable, present, restaurantID) \
+            VALUES (%s, %s, %s, %s, %s, %s)", (_name, _type, _shelfLife, _parishable, _present, restaurantID))
       
         self.commitChanges()
     
@@ -150,40 +125,40 @@ class Database():
     
     def addTruck(self, _city, _capacity):
         self.cursor.execute("INSERT INTO Trucks (City, Capacity) \
-            VALUES (%s, %s)", (_city, _capacity))
+            VALUES (%s, %s);", (_city, _capacity))
       
         self.commitChanges()
 
-    def addDonation(self, _foodName, _restaurantName, _donationCenterName, _amount, _dateAdded):
-        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
-        foodID = self.cursor.fetchone()
+    def addDonation(self, _foodName, _donationCenterName, _amount, _dateAdded):
+        # self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        # foodID = self.cursor.fetchone()
+        foodID = _foodName
+        donationCenterID = _donationCenterName
+        # self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
+        # donationCenterID = self.cursor.fetchone()
 
-        self.cursor.execute("SELECT RestaurantID FROM Restaurant WHERE RestaurantName LIKE %s", (_restaurantName,))
-        restaurantID = self.cursor.fetchone()
-
-        self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
-        donationCenterID = self.cursor.fetchone()
-
-        self.cursor.execute("INSERT INTO Donations (FoodID, RestaurantID, DonationCenterID, QuantityDonated, DateDonated) \
-            VALUES (%s, %s, %s, %s, %s)", (foodID, restaurantID, donationCenterID, _amount, _dateAdded))
+        self.cursor.execute("INSERT INTO Donations (FoodID, DonationCenterID, QuantityDonated, DateDonated) \
+            VALUES (%s, %s, %s, %s);", (foodID, donationCenterID, _amount, _dateAdded))
       
         self.commitChanges()
 
     def addDonationCenter(self, _name, _address, _capacity, _requested):
         self.cursor.execute("INSERT INTO Donation_Center (Address, Capacity, Requested, DonationCenterName) \
-            VALUES (%s, %s, %s, %s)", (_address, _capacity, _requested, _name))
+            VALUES (%s, %s, %s, %s);", (_address, _capacity, _requested, _name))
       
         self.commitChanges()
 
     def addFoodAmount(self, _foodName, _donationCenterName, _amount):
-        self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
-        donationCenterID = self.cursor.fetchall()
+        # self.cursor.execute("SELECT DonationCenterID FROM Donation_Center WHERE DonationCenterName LIKE %s", (_donationCenterName,))
+        # donationCenterID = self.cursor.fetchall()
 
-        self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
-        foodID = self.cursor.fetchall()
+        # self.cursor.execute("SELECT FoodID FROM Foods WHERE FoodName LIKE %s", (_foodName,))
+        # foodID = self.cursor.fetchall()
+        foodID = _foodName
+        donationCenterID = _donationCenterName
 
-        self.cursor.execute("INSERT INTO FoodAmounts (FoodID, DonationCenterID, Amount) \
-            VALUES (%s, %s, %s,)", (foodID, donationCenterID, _amount))
+        self.cursor.execute("INSERT INTO FoodAmount (FoodID, DonationCenterID, Amount) \
+            VALUES (%s, %s, %s)", (foodID, donationCenterID, _amount))
       
         self.commitChanges() 
 #################### Database retrieval #######################################
@@ -204,18 +179,26 @@ class Database():
         self.cursor.execute("SELECT Address FROM Donation_Center;")
         return self.cursor.fetchall()
     
+    def getAmount(self, foodID):
+        self.cursor.execute("SELECT Amount FROM FoodAmount WHERE foodID = %s", (foodID,))
+        return self.cursor.fetchone()
+
+    def updateAmount(self, foodID, additional):
+        self.cursor.execute("UPDATE FoodAmount SET Amount=Amount + %s WHERE foodID = %s;", (additional, foodID))
+        self.commitChanges()
+
 #################### Database removal #########################################
     def removeFood(self, _foodName):
         self.cursor.execute("DELETE FROM Foods WHERE FoodName = %s;", (_foodName,))
         self.commitChanges()
     
-    def removeRestaurant(self, _restaruantName):
-        self.cursor.execute("DELETE FROM Restaurant WHERE RestaurantName = %s;", (_restaurantName,))
-        self.commitChanges()
+    # def removeRestaurant(self, _restaruantName):
+    #     self.cursor.execute("DELETE FROM Restaurant WHERE RestaurantName = %s;", (_restaurantName,))
+    #     self.commitChanges()
 
-    def removeDonationCenter(self, _dontationCenterName):
-        self.cursor.execute("DELETE FROM Donation_Center WHERE DonationCenterName = %s;", (_donationCenterName,))
-        self.commitChanges()
+    # def removeDonationCenter(self, _dontationCenterName):
+    #     self.cursor.execute("DELETE FROM Donation_Center WHERE DonationCenterName = %s;", (_donationCenterName,))
+    #     self.commitChanges()
 
     def removeTruck(self, _truckID):
         self.cursor.execute("DELETE FROM Trucks WHERE TruckID = %s;", (_truckID,))
@@ -225,6 +208,13 @@ class Database():
         self.cursor.execute("DELETE FROM FoodAmount WHERE AmountsID = %s;", (_foodAmount,))
         self.commitChanges()
         
+    def inFoodAmountTable(self, _foodID):
+        self.cursor.execute("SELECT * FROM FoodAmount WHERE foodid = %s;", (_foodID,))
+        if self.cursor.fetchone() == None:
+            return False
+        else:
+            return True
+
 ############################################################## Main Testing
 
 def main():
@@ -253,14 +243,11 @@ def main():
         interface.Destroy()
         interface.setupTables()
 
-    interface.addFood("milk", "Dairy", 10, True, True)
     interface.addRestaurant("Liam's Bistro", "1600 Pennsylvania Ave NW, Washington, DC 20500")
+    interface.addFood("milk", "Dairy", 10, True, True, "Liam's Bistro")
     interface.addDonationCenter("Liam's Food Bank", "Westminster, London SW1A 1AA, United Kingdom", 100, 23)
     interface.addTruck("Vatican City", 30)
-    interface.addDonation("milk", "Liam's Bistro", "Liam's Food Bank", 2, "12/12/12")
-  
-    print(interface.getFoodItem())
-    print(interface.getAddresses())
+    interface.addDonation("milk", "Liam's Food Bank", 2, "12/12/12")
     
     #/////////////////////////////////////////////////////
 
