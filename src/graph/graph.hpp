@@ -44,7 +44,10 @@ using vertex_pt = SubGraph::vertex_property_type;
 SubGraph constructGraph(const std::string &filename);
 
 // Constructs a subgraph from a vector of edges
-SubGraph constructSubgraphFromEdges(const SubGraph &parent, const std::vector<edge_t> &edges);
+SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges);
+
+// PRECONDITION: edges need to include all vertices. i.e: be a MST
+SubGraph constructFromMST(SubGraph &parent, const std::vector<edge_t> &edges);
 
 // Adds vertices to a subgraph
 void appendSubgraph(SubGraph &graph, const std::vector<vertex_t> &vertices);

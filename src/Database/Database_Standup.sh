@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# docker network create postgres_backend 
+# docker network create postgres_backend
 # docker run --name postgres \
 #   -e POSTGRES_PASSWORD=liam \
 #   -e POSTGRES_USER=Liam \
@@ -13,4 +13,4 @@ docker-compose up -d
 
 IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' database_db_1)
 
-python3 db_interface.py -b 1 -i $IP
+python3 fake_data.py -b 1 -i $IP
