@@ -1,12 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if current_user.is_anonymous %}
-    <h1>YOU ARE NOT LOGGED IN</h1>
-    {% else %}
-    <h1>Hi, {{current_user.username}}!</h1>
-    {% for post in posts %}
-    <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
-    {% endfor %}
-    {% endif %}
+                <div class="text-center bg-img">
+                        <div>
+                                <h1 class="text-black titlewords fullTitle">
+                                        <a href="#aboutme">Consume</a>
+                                </h1>
+                                <h6 class="text-black titlewords subtitle font-italic">
+                                        {% if current_user.is_anonymous %}
+                                        <a href="#">YOU ARE NOT LOGGED IN</a>
+                                        {% else %}
+                                        <a href="#">Hi, {{current_user.username}}!</h1>
+
+                                        {% endif %}
+                                </h6>
+                        </div>
+                </div>
+                {% for post in posts %}
+                        <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
+                {% endfor %}
 {% endblock %}
