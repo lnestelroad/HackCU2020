@@ -5,24 +5,54 @@
 
 const static std::string filename{"viz.dot"};
 
-SubGraph constructGraph(const std::string &jsonfile)
+std::vector<SubGraph> constructGraph(const std::string &jsonfile)
 {
     using namespace boost;
     SubGraph g{0};
+    SubGraph source{0};
+    SubGraph sink{0};
 
     json j;
 
     std::ifstream i(jsonfile);
     i >> j;
 
+    // Construct 3 graphs
+
     std::map<std::string, vertex_t> nameMap{};
+    std::map<std::string, vertex_t> nameMapSource{};
+    std::map<std::string, vertex_t> nameMapSink{};
+
+    auto checkVertexType = [&](const int type) {
+        return (type == 1) ? true : false;
+    };
 
     for (json::iterator it = j.begin(); it != j.end(); ++it)
     {
+        // checking if sink
+        // probably need a bool conversion
+        if (checkVertexType(stoi(it.value()["type"].dump())))
+        {
+            vertex_t src_vert = add_vertex(source);
+            put(vertex_name, source, src_vert, it.key());
+            // bool conversion?
+            put(vertex_root, source, src_vert, checkVertexType(stoi(it.value()["type"].dump())));
+            nameMapSource[it.key()] = src_vert;
+        }
+        else
+        {
+            vertex_t sink_vert = add_vertex(sink);
+            put(vertex_name, sink, sink_vert, it.key());
+            put(vertex_root, sink, sink_vert, checkVertexType(stoi(it.value()["type"].dump())));
+            nameMapSink[it.key()] = sink_vert;
+        }
+
         // Initializing full graph
         vertex_t new_vert = add_vertex(g);
         put(vertex_name, g, new_vert, it.key());
-        //std::cout << "adding vertex: " << get(get(vertex_name, g), new_vert) << "\n";
+        put(vertex_root, g, new_vert, checkVertexType(stoi(it.value()["type"].dump())));
+        //std::cout << "adding vertex: " << get(get(vertex_name, g), new_vert) << "\n"
+        //          << it.value()["type"].dump() << "\n\n";
         nameMap[it.key()] = new_vert;
     }
     for (json::iterator it = j.begin(); it != j.end(); ++it)
@@ -37,15 +67,28 @@ SubGraph constructGraph(const std::string &jsonfile)
                 nameMap[it2.key()] = new_vert;
             }
             auto [new_edge, added] = add_edge(nameMap.at(it.key()), nameMap.at(it2.key()), g);
-
             put(edge_weight, g, new_edge, stoi(it2.value()["edge_weight"].dump()));
+
+            // Add edge to source graph
+            if (nameMapSource.find(it2.key()) != nameMapSource.end() && nameMapSource.find(it.key()) != nameMapSource.end())
+            {
+                auto [new_edge, added] = add_edge(nameMapSource.at(it.key()), nameMapSource.at(it2.key()), source);
+                put(edge_weight, source, new_edge, stoi(it2.value()["edge_weight"].dump()));
+            }
+            else if (nameMapSink.find(it2.key()) != nameMapSink.end() && nameMapSink.find(it.key()) != nameMapSink.end())
+            {
+                auto [new_edge, added] = add_edge(nameMapSink.at(it.key()), nameMapSink.at(it2.key()), sink);
+                put(edge_weight, sink, new_edge, stoi(it2.value()["edge_weight"].dump()));
+            }
         }
 
         // ADDING VERTEX WEIGHTS
         put(vertex_distance, g, nameMap.at(it.key()), stoi(it.value()["vertex_weight"].dump()));
+
+        // also add for source and sink graphs?
     }
 
-    return g;
+    return {g, source, sink};
 }
 
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges)
@@ -219,16 +262,35 @@ int main()
     fs.open(filename, std::fstream::out);
 
     std::string jsonfile = "../../.cache_money/graph.json";
-    SubGraph g = constructGraph(jsonfile);
+    SubGraph g, source, sink;
+
+    std::vector<SubGraph> graphVec = constructGraph(jsonfile);
+    g = graphVec[0];
+    source = graphVec[1];
+    sink = graphVec[2];
+
+    std::cout << "Graph size: " << num_vertices(g) << "\nSource size: " << num_vertices(source) << "\nSink size: " << num_vertices(sink) << std::endl;
 
     std::vector<edge_t> MST;
     kruskal_minimum_spanning_tree(g, std::back_inserter(MST));
 
+    std::vector<edge_t> srcMST;
+    kruskal_minimum_spanning_tree(source, std::back_inserter(srcMST));
+
+    std::vector<edge_t> sinkMST;
+    kruskal_minimum_spanning_tree(sink, std::back_inserter(sinkMST));
+
     SubGraph MSTgraph = constructFromMST(g, MST);
+    SubGraph MSTsrcGraph = constructFromMST(source, srcMST);
+    SubGraph MSTsinkGraph = constructFromMST(sink, sinkMST);
+
     json output;
     output.push_back(preorderTraversal(MSTgraph));
+    output.push_back(preorderTraversal(MSTsrcGraph));
+    output.push_back(preorderTraversal(MSTsinkGraph));
+
     std::cout << output << std::endl;
-    write_graphviz(fs, g);
+    write_graphviz(fs, MSTsinkGraph);
 
     fs.close();
 

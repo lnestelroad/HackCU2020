@@ -1,6 +1,7 @@
 {
     "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
         "vertex_weight": 5,
+        "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 0
@@ -33,6 +34,7 @@
     },
     "900 Baseline Rd, Boulder, CO 80302, USA": {
         "vertex_weight": 5,
+        "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 290
@@ -65,6 +67,7 @@
     },
     "4800 Baseline Rd, Boulder, CO 80303, USA": {
         "vertex_weight": 5,
+        "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 246
@@ -97,6 +100,7 @@
     },
     "673 S Broadway, Boulder, CO 80305, USA": {
         "vertex_weight": 5,
+        "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 353
@@ -129,6 +133,7 @@
     },
     "2400 Baseline Rd, Boulder, CO 80305, USA": {
         "vertex_weight": 5,
+        "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 120
@@ -161,6 +166,7 @@
     },
     "2960 Valmont Rd, Boulder, CO 80301, USA": {
         "vertex_weight": 5,
+        "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 513
@@ -193,6 +199,7 @@
     },
     "650 S Taylor Ave, Louisville, CO 80027, USA": {
         "vertex_weight": 5,
+        "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 817
@@ -225,6 +232,7 @@
     },
     "5749 Arapahoe Ave, Boulder, CO 80303, USA": {
         "vertex_weight": 5,
+        "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 630
@@ -257,6 +265,7 @@
     },
     "1575 Yarmouth Ave, Boulder, CO 80304, USA": {
         "vertex_weight": 5,
+        "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
                 "edge_weight": 820

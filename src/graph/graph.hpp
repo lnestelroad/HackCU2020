@@ -26,7 +26,7 @@ typedef boost::property<boost::edge_weight_t, int, boost::property<boost::edge_i
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS,
                                     boost::undirectedS,
-                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, boost::property<boost::vertex_name_t, std::string, boost::property<boost::vertex_distance_t, int>>>,
+                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, boost::property<boost::vertex_name_t, std::string, boost::property<boost::vertex_distance_t, int, boost::property<boost::vertex_root_t, bool>>>>,
                                     EdgeProperty,
                                     boost::property<boost::graph_name_t, std::string,
                                                     boost::property<boost::graph_graph_attribute_t, GraphvizAttributes,
@@ -42,7 +42,7 @@ using vertex_t = SubGraph::vertex_descriptor;
 using vertex_pt = SubGraph::vertex_property_type;
 
 // Constructs a graph from filename
-SubGraph constructGraph(const std::string &jsonfile);
+std::vector<SubGraph> constructGraph(const std::string &jsonfile);
 
 // Constructs a subgraph from a vector of edges
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges);
