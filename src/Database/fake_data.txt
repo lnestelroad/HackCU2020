@@ -1,7 +1,7 @@
 Restaurants:
-    Carelli's
-    Cosmo's Pizza
-    May Wah
+    "Carelli's"
+    ""Cosmo's Pizza"
+    "May Wah"
     Cafe Mexicali
     Moe's Original BBQ - Boulder
     Taj Indian Cuisine
