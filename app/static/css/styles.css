@@ -73,6 +73,14 @@ img {
     display: none;
 }
 
+.green-theme {
+    background-color: #8BFF33;
+}
+
+.bg-light {
+    background-color: #8BFF33;
+}
+
 /*a large item has large upper and lower padding*/
 .large {
     padding-top: 150px;
