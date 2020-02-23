@@ -2,6 +2,12 @@
 
 {% block content %}
     <h1>User: {{user.username}}</h1>
+    <h1>Email: {{user.email}}</h1>
+    {% if user.food_supplier %}
+    <h1>Food Supplier</h1>
+    {% else %}
+    <h1>Food Bank</h1>
+    {% endif %}
     <hr>
     {% for post in posts %}
     <p>

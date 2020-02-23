@@ -5,8 +5,32 @@
     <h1>YOU ARE NOT LOGGED IN</h1>
     {% else %}
     <h1>Hi, {{current_user.username}}!</h1>
-    {% for post in posts %}
-    <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
-    {% endfor %}
     {% endif %}
+    <!-- {% for post in posts %}
+    <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
+    {% endfor %} -->
+    <h1>Help win the battle of food waste with us</h1>
+    <p>Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the global battle against food waste.</p>
+
+    <div class="container-fluid p-3 my-3 border">
+        <h1>Help win the battle of food waste with us</h1>
+        <p>
+            Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the global battle against food waste, help the environment, and provide access to food to those who need it most.
+        </p>
+        {% if current_user.is_anonymous %}
+        <p>Help Now, <a href="{{ url_for('login') }}">Login</a></p>
+        {% else %}
+        <h3>Hello, {{current_user.username}}</h3>
+        {% endif %}
+    </div>
+
+    <div class="container-fluid p-3 my-3 bg-dark text-white">
+        <h1>My First Bootstrap Page</h1>
+        <p>This container has a dark background color and a white text, and some extra padding and margins.</p>
+    </div>
+
+    <div class="container-fluid p-3 my-3 bg-primary text-white">
+        <h1>My First Bootstrap Page</h1>
+        <p>This container has a blue background color and a white text, and some extra padding and margins.</p>
+    </div>
 {% endblock %}
