@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <tuple>
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/subgraph.hpp>
@@ -42,7 +43,8 @@ using vertex_t = SubGraph::vertex_descriptor;
 using vertex_pt = SubGraph::vertex_property_type;
 
 // Constructs a graph from filename
-std::vector<SubGraph> constructGraph(const std::string &jsonfile);
+std::tuple<std::vector<SubGraph>, std::vector<vertex_t>, std::vector<vertex_t>>
+constructGraph(const std::string &jsonfile);
 
 // Constructs a subgraph from a vector of edges
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges);
@@ -61,3 +63,11 @@ edge_t findConnectingEdge(const SubGraph &graph);
 
 // Vector of three elements, main, source, and sink. Returns truck route to traverse source then sink
 json constructRoute(std::vector<SubGraph> &graphs);
+
+void sortVerticesByAbsValue(std::vector<vertex_t> &vertices, SubGraph &graph);
+
+std::map<vertex_t, vertex_t> assignSources(std::vector<vertex_t> &sources, std::vector<vertex_t> &sinks, SubGraph &sourceGraph, SubGraph &sinkGraph);
+
+std::optional<vertex_t> extractFromName(const vertex_t &sub_vertex, SubGraph &subGraph, SubGraph &transGraph);
+
+std::vector<SubGraph> createSubgraphs(SubGraph &subGraph);

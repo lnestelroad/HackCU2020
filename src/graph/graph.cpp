@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include <queue>
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
 #include <fstream>
 #include <stack>
@@ -6,7 +7,9 @@
 const static std::string filename{"viz.dot"};
 const static std::string outfile{"../../.cache_money/truck_paths.json"};
 
-std::vector<SubGraph>
+constexpr int NUM_TRUCKS{3};
+
+std::tuple<std::vector<SubGraph>, std::vector<vertex_t>, std::vector<vertex_t>>
 constructGraph(const std::string &jsonfile)
 {
     using namespace boost;
@@ -24,6 +27,10 @@ constructGraph(const std::string &jsonfile)
     std::map<std::string, vertex_t> nameMap{};
     std::map<std::string, vertex_t> nameMapSource{};
     std::map<std::string, vertex_t> nameMapSink{};
+    //checkVertexType
+    std::vector<vertex_t>
+        sourceVertices{};
+    std::vector<vertex_t> sinkVertices{};
 
     auto checkVertexType = [&](const int type) {
         return (type == 1) ? true : false;
@@ -33,20 +40,26 @@ constructGraph(const std::string &jsonfile)
     {
         // checking if sink
         // probably need a bool conversion
-        if (checkVertexType(stoi(it.value()["type"].dump())))
+        if ((stoi(it.value()["type"].dump())))
         {
             vertex_t src_vert = add_vertex(source);
             put(vertex_name, source, src_vert, it.key());
             // bool conversion?
             put(vertex_root, source, src_vert, checkVertexType(stoi(it.value()["type"].dump())));
+            put(vertex_distance, source, src_vert, stoi(it.value()["vertex_weight"].dump()));
+
             nameMapSource[it.key()] = src_vert;
+            sourceVertices.push_back(src_vert);
         }
         else
         {
             vertex_t sink_vert = add_vertex(sink);
             put(vertex_name, sink, sink_vert, it.key());
             put(vertex_root, sink, sink_vert, checkVertexType(stoi(it.value()["type"].dump())));
+            put(vertex_distance, sink, sink_vert, -1 * stoi(it.value()["vertex_weight"].dump()));
+
             nameMapSink[it.key()] = sink_vert;
+            sinkVertices.push_back(sink_vert);
         }
 
         // Initializing full graph
@@ -83,14 +96,24 @@ constructGraph(const std::string &jsonfile)
                 put(edge_weight, sink, new_edge, stoi(it2.value()["edge_weight"].dump()));
             }
         }
-
+        /*
         // ADDING VERTEX WEIGHTS
-        put(vertex_distance, g, nameMap.at(it.key()), stoi(it.value()["vertex_weight"].dump()));
+        if (checkVertexType(stoi(nameMap.at(it.key())["type"].dump())))
+        {
+            put(vertex_distance, g, nameMap.at(it.key()), stoi(it.value()["vertex_weight"].dump()));
+            //std::cout << "Souce Val: " << get(get(vertex_distance, g), it.kety)
+        }
+        else
+        {
+            put(vertex_distance, g, nameMap.at(it.key()), -1 * stoi(it.value()["vertex_weight"].dump()));
+        }
 
+                //put(vertex_distance, g, nameMap.at(it.key()), stoi(it.value()["vertex_weight"].dump()));
+        */
         // also add for source and sink graphs?
     }
 
-    return {g, source, sink};
+    return {{g, source, sink}, sourceVertices, sinkVertices};
 }
 
 SubGraph constructSubgraphFromEdges(SubGraph &parent, const std::vector<edge_t> &edges)
@@ -321,9 +344,36 @@ json constructRoute(std::vector<SubGraph> &graphs)
     std::vector<edge_t> sinkMST;
     kruskal_minimum_spanning_tree(sink, std::back_inserter(sinkMST));
 
-    SubGraph MSTgraph = constructFromMST(g, MST);
-    SubGraph MSTsrcGraph = constructFromMST(src, srcMST);
-    SubGraph MSTsinkGraph = constructFromMST(sink, sinkMST);
+    SubGraph MSTgraph;
+    SubGraph MSTsrcGraph;
+    SubGraph MSTsinkGraph;
+
+    if (num_edges(g) <= 1)
+    {
+        MSTgraph = g;
+    }
+    else
+    {
+        MSTgraph = constructFromMST(g, MST);
+    }
+
+    if (num_edges(src) <= 1)
+    {
+        MSTsrcGraph = src;
+    }
+    else
+    {
+        MSTsrcGraph = constructFromMST(src, srcMST);
+    }
+
+    if (num_edges(sink) <= 1)
+    {
+        MSTsinkGraph = sink;
+    }
+    else
+    {
+        MSTsinkGraph = constructFromMST(sink, sinkMST);
+    }
 
     edge_t connecting = findConnectingEdge(g);
     vertex_t c1 = source(connecting, g);
@@ -341,6 +391,121 @@ json constructRoute(std::vector<SubGraph> &graphs)
     return output;
 }
 
+void sortVerticesByAbsValue(std::vector<vertex_t> &vertices, SubGraph &graph)
+{
+    using namespace boost;
+    auto compare_vertices = [&](const vertex_t &t1, const vertex_t &t2) {
+        return get(get(vertex_distance, graph), t1) < get(get(vertex_distance, graph), t2);
+    };
+    std::sort(vertices.begin(), vertices.end(), compare_vertices);
+}
+
+std::map<vertex_t, vertex_t> assignSources(std::vector<vertex_t> &sources, std::vector<vertex_t> &sinks, SubGraph &sourceGraph, SubGraph &sinkGraph)
+{
+    using namespace boost;
+    std::map<vertex_t, vertex_t> sinkMap;
+
+    sortVerticesByAbsValue(sources, sourceGraph);
+    sortVerticesByAbsValue(sinks, sinkGraph);
+
+    for (const auto &vert : sources)
+    {
+        vertex_t sink = sinks[0];
+
+        std::cout << "adding " << get(get(vertex_distance, sourceGraph), vert) << " to " << get(get(vertex_distance, sinkGraph), sink) << "\n";
+
+        put(vertex_distance, sinkGraph, sink, get(get(vertex_distance, sinkGraph), sink) + get(get(vertex_distance, sourceGraph), vert));
+        sortVerticesByAbsValue(sinks, sinkGraph);
+        sinkMap[vert] = sink;
+        //sinkMap.push_back({vert, sink});
+    }
+
+    return sinkMap;
+}
+
+std::optional<vertex_t> extractFromName(const vertex_t &sub_vertex, SubGraph &subGraph, SubGraph &transGraph)
+{
+    using namespace boost;
+    for (auto [begin, end] = vertices(transGraph); begin != end; begin++)
+    {
+        if (get(get(vertex_name, subGraph), sub_vertex) == get(get(vertex_name, transGraph), *begin))
+        {
+            return *begin;
+        }
+    }
+    // optional
+    //std::cout << "failed to extract from name" << std::endl;
+    return {};
+}
+
+std::vector<SubGraph> createSubgraphs(SubGraph &subGraph, SubGraph &globalGraph)
+{
+    using namespace boost;
+    SubGraph sourceGraph{};
+    SubGraph sinkGraph{};
+
+    std::vector<vertex_t>
+        sourceVertices{};
+    std::vector<vertex_t> sinkVertices{};
+
+    for (auto [begin, end] = vertices(subGraph); begin != end; begin++)
+    {
+        // source
+        if (get(get(vertex_root, subGraph), *begin) == 1)
+        {
+            vertex_t newv = add_vertex(sourceGraph);
+
+            put(vertex_name, sourceGraph, newv, get(get(vertex_name, subGraph), *begin));
+            put(vertex_root, sourceGraph, newv, get(get(vertex_root, subGraph), *begin));
+            put(vertex_distance, sourceGraph, newv, get(get(vertex_distance, subGraph), *begin));
+
+            sourceVertices.push_back(newv);
+        }
+        else
+        {
+            vertex_t newv = add_vertex(sinkGraph);
+
+            put(vertex_name, sinkGraph, newv, get(get(vertex_name, subGraph), *begin));
+            put(vertex_root, sinkGraph, newv, get(get(vertex_root, subGraph), *begin));
+            put(vertex_distance, sinkGraph, newv, get(get(vertex_distance, subGraph), *begin));
+
+            sinkVertices.push_back(newv);
+        }
+    }
+
+    for (auto [begin, end] = edges(globalGraph); begin != end; begin++)
+    {
+        edge_t ed = *begin;
+        vertex_t src = source(ed, globalGraph);
+        vertex_t dst = target(ed, globalGraph);
+
+        auto sourceVertOpt = extractFromName(src, globalGraph, sourceGraph);
+        auto sinkVertOpt = extractFromName(dst, globalGraph, sourceGraph);
+
+        // adding edge to source
+        if (sourceVertOpt && sinkVertOpt)
+        {
+            std::cout << "Adding source edge\n";
+
+            auto [newed, test] = add_edge(*sourceVertOpt, *sinkVertOpt, sourceGraph);
+            put(edge_weight, sourceGraph, newed, get(get(edge_weight, globalGraph), ed));
+        }
+
+        sourceVertOpt = extractFromName(src, globalGraph, sinkGraph);
+        sinkVertOpt = extractFromName(dst, globalGraph, sinkGraph);
+
+        // adding edge to sink
+        if (sourceVertOpt && sinkVertOpt)
+        {
+            std::cout << "Adding sink edge\n";
+            auto [newed, test] = add_edge(*sourceVertOpt, *sinkVertOpt, sinkGraph);
+            put(edge_weight, sinkGraph, newed, get(get(edge_weight, globalGraph), ed));
+        }
+    }
+
+    return {subGraph, sourceGraph, sinkGraph};
+}
+
 int main()
 {
     using namespace boost;
@@ -353,15 +518,106 @@ int main()
     out.open(outfile, std::fstream::out);
 
     std::string jsonfile = "../../.cache_money/graph.json";
-    SubGraph g, src, sink;
 
-    std::vector<SubGraph> graphVec = constructGraph(jsonfile);
+    auto [graphVec, sourceVec, sinkVec] = constructGraph(jsonfile);
+
+    std::map<vertex_t, vertex_t> sinkMap = assignSources(sourceVec, sinkVec, graphVec[1], graphVec[2]);
+
+    std::cout << "Source: " << sourceVec.size() << "\nSink: \n"
+              << sinkVec.size();
 
     json outJson = constructRoute(graphVec);
     std::cout << outJson << std::endl;
     //write_graphviz(fs, MSTsinkGraph);
 
-    out << outJson;
+    SubGraph finalGraph{};
+    std::vector<SubGraph> subgraphs{};
+    for (int i = 0; i < NUM_TRUCKS; ++i)
+    {
+        subgraphs.push_back(finalGraph.create_subgraph());
+    }
+
+    int i = 0;
+    std::vector<vertex_t> finalVertices{};
+    for (auto it = sinkMap.begin(); it != sinkMap.end(); it++)
+    {
+        auto sourceVertOpt = extractFromName(it->first, graphVec[1], graphVec[0]);
+        auto sinkVertOpt = extractFromName(it->second, graphVec[2], graphVec[0]);
+
+        if (sourceVertOpt && sinkVertOpt)
+        {
+            vertex_t sourceVert = *sourceVertOpt;
+            vertex_t sinkVert = *sinkVertOpt;
+            i++;
+
+            vertex_t newSource = add_vertex(subgraphs[i % NUM_TRUCKS]);
+            vertex_t newSink = add_vertex(subgraphs[i % NUM_TRUCKS]);
+
+            // copy data
+            put(vertex_name, subgraphs[i % NUM_TRUCKS], newSource, get(get(vertex_name, graphVec[0]), sourceVert));
+            put(vertex_root, subgraphs[i % NUM_TRUCKS], newSource, get(get(vertex_root, graphVec[0]), sourceVert));
+            put(vertex_distance, subgraphs[i % NUM_TRUCKS], newSource, get(get(vertex_distance, graphVec[0]), sourceVert));
+
+            put(vertex_name, subgraphs[i % NUM_TRUCKS], newSink, get(get(vertex_name, graphVec[0]), sinkVert));
+            put(vertex_root, subgraphs[i % NUM_TRUCKS], newSink, get(get(vertex_root, graphVec[0]), sinkVert));
+            put(vertex_distance, subgraphs[i % NUM_TRUCKS], newSink, get(get(vertex_distance, graphVec[0]), sinkVert));
+
+            finalVertices.push_back(newSource);
+            finalVertices.push_back(newSink);
+        }
+        else
+        {
+            std::cout << "error copying\n";
+        }
+    }
+    i = 0;
+
+    for (auto it = sinkMap.begin(); it != sinkMap.end(); it++)
+    {
+
+        auto sourceVertOpt = extractFromName(it->first, graphVec[1], graphVec[0]);
+        auto sinkVertOpt = extractFromName(it->second, graphVec[2], graphVec[0]);
+
+        if (sourceVertOpt && sinkVertOpt)
+        {
+            vertex_t sourceVert = *sourceVertOpt;
+            vertex_t sinkVert = *sinkVertOpt;
+            i++;
+
+            auto [begin, end] = adjacent_vertices(sourceVert, graphVec[0]);
+            for (; begin != end; begin++)
+            {
+                auto vert1 = extractFromName(sourceVert, graphVec[0], subgraphs[i % NUM_TRUCKS]);
+                auto vert2 = extractFromName(*begin, graphVec[0], subgraphs[i % NUM_TRUCKS]);
+
+                if (vert1 && vert2)
+                {
+                    auto [ed, found] = add_edge(*vert1, *vert2, subgraphs[i % NUM_TRUCKS]);
+
+                    auto [olded, found2] = edge(sourceVert, *begin, graphVec[0]);
+                    put(edge_weight, subgraphs[i % NUM_TRUCKS], ed, get(get(edge_weight, graphVec[0]), olded));
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < NUM_TRUCKS; ++i)
+    {
+        std::cout << "TRUCK " << i << " NODES: " << num_vertices(subgraphs[i]) << "\nSTOPS: " << num_edges(subgraphs[i]) << "\n";
+
+        // have overall graph (subgraphs[i]). need individual source and sinks
+        auto big_boys = createSubgraphs(subgraphs[i], graphVec[0]);
+        std::cout << "SINK SIZE: " << num_vertices(big_boys[2]) << "\nEDGES: " << num_edges(big_boys[2]) << "\n";
+        json newOutJson = constructRoute(big_boys);
+        std::cout << newOutJson << std::endl;
+    }
+
+    std::cout << "overall stops: " << num_edges(finalGraph) << "\n";
+
+    out
+        << outJson;
+
+    write_graphviz(fs, finalGraph);
 
     fs.close();
     out.close();
