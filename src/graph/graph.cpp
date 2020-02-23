@@ -14,15 +14,12 @@ SubGraph constructGraph(const std::string &jsonfile)
     std::ifstream i(jsonfile);
     i >> j;
 
-    //std::cout << j;
-
     std::map<std::string, vertex_t> nameMap{};
 
     for (json::iterator it = j.begin(); it != j.end(); ++it)
     {
         // Initializing full graph
         vertex_t new_vert = add_vertex(g);
-        std::cout << it.key() << std::endl;
         put(vertex_name, g, new_vert, it.key());
         nameMap[it.key()] = new_vert;
     }
@@ -37,10 +34,12 @@ SubGraph constructGraph(const std::string &jsonfile)
                 nameMap[it2.key()] = new_vert;
             }
             auto [new_edge, added] = add_edge(nameMap.at(it.key()), nameMap.at(it2.key()), g);
-            //it2.value().dump(),
 
             put(edge_weight, g, new_edge, stoi(it2.value()["edge_weight"].dump()));
         }
+
+        // ADDING VERTEX WEIGHTS
+        put(vertex_distance, g, nameMap.at(it.key()), stoi(it.value()["vertex_weight"].dump()));
     }
 
     return g;
@@ -190,7 +189,7 @@ int main()
 
     SubGraph MSTgraph = constructFromMST(g, MST);
 
-    write_graphviz(fs, MSTgraph);
+    write_graphviz(fs, g);
 
     fs.close();
 

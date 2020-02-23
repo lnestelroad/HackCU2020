@@ -26,7 +26,7 @@ typedef boost::property<boost::edge_weight_t, int, boost::property<boost::edge_i
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS,
                                     boost::undirectedS,
-                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, boost::property<boost::vertex_name_t, std::string>>,
+                                    boost::property<boost::vertex_attribute_t, GraphvizAttributes, boost::property<boost::vertex_name_t, std::string, boost::property<boost::vertex_distance_t, int>>>,
                                     EdgeProperty,
                                     boost::property<boost::graph_name_t, std::string,
                                                     boost::property<boost::graph_graph_attribute_t, GraphvizAttributes,
