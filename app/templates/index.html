@@ -1,23 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if current_user.is_anonymous %}
-<h1>YOU ARE NOT LOGGED IN</h1>
-{% else %}
-<h1>Hi, {{current_user.username}}!</h1>
-{% endif %}
 <!-- {% for post in posts %}
     <div><p>{{post.author.username}} says: <b>{{post.body}}</b></p></div>
     {% endfor %} -->
-<h1>Help win the battle of food waste with us</h1>
-<p>Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the global
-    battle against food waste.</p>
-
 <div class="container-fluid p-3 my-3 border">
-    <h1>Help win the battle of food waste with us</h1>
+    <h1>Help win the battle against food waste with us</h1>
     <p>
-        Through our app, we connect restauarants, schools, hotels, and hospitals with food banks in order to solve the
-        global battle against food waste, help the environment, and provide access to food to those who need it most.
+        Our app connects restauarants, schools, hotels, hospitals, and grocery stores with food banks in order to solve
+        the global battle against food waste, help the environment, and provide access to food to those who need it
+        most.
     </p>
     {% if current_user.is_anonymous %}
     <p>Help Now, <a href="{{ url_for('login') }}">Login</a></p>
@@ -27,12 +19,77 @@
 </div>
 
 <div class="container-fluid p-3 my-3 bg-dark text-white">
-    <h1>My First Bootstrap Page</h1>
-    <p>This container has a dark background color and a white text, and some extra padding and margins.</p>
+    <h1>food waste is a *problem*,</h1>
+    <ul>
+        <li>Between 30% - 40% of the United States' food supply is wasted</li>
+        <li>Of the estimated 125 - 160 billion pounds of food that goes to waste every year, much of it is perfectly
+            edible and nutritous</li>
+        <li>Food waste costs the United States $218 billion every year</li>
+        <li>An estimated 43 billion pounds of food were wasted in the US retail stores in 2010. Most of the loss in
+            retail operations is in perishables, including baked goods, produce, meat, seafood and prepared meals. The
+            USDA estimates that supermarkets lose $15 billion annually in unsold fruit and vegetables alone</li>
+        <li>The main drivers of food loss at retail stores include overstocked product displays, expectation of cosmetic
+            perfection of fruits, oversized packaging, the availability of prepared food until closing, expired “sell
+            by” dates, and over purchasing of unpopular foods</li>
+        <li>US restauarants generate an estimated 22 - 33 billion pounds of food waste each year</li>
+        <li>Schools, hotels, and hospitals generate an additional 7 - 11 billion pounds of wasted food every year</li>
+    </ul>
 </div>
 
-<div class="container-fluid p-3 my-3 bg-primary text-white">
-    <h1>My First Bootstrap Page</h1>
-    <p>This container has a blue background color and a white text, and some extra padding and margins.</p>
+<div class="container-fluid p-3 my-3 border">
+    <h1>and there are people in *need*,</h1>
+    <ul>
+        <li>1 in 6 American children live in a state of food insecurity, not knowing where their next meal will come
+            from</li>
+        <li>12% of American households are food insecure</li>
+        <li>There are approximately 50,000,000 food insecure people in the United States, and 800,000,000 food insecure
+            people globally</li>
+        <br>
+        <h3>What does food insecure mean?</h3>
+        <h4>"A economic and social condition of limited or uncertian access to adequate food." -USDA</h4>
+    </ul>
 </div>
+
+<div class="container-fluid p-3 my-3 bg-dark text-white">
+    <h1>but we have a *solution*.</h1>
+    <ul>
+        <li>Our app provides an easy way for restauarants, schools, hotels, hospitals, and grocery stores to deliver
+            their extra food to local food banks</li>
+        <li>If you are a restauarant, school, hotel, hospital, or grocery store, all you have to do is say what extra
+            food you are willing to donate</li>
+        <li>If you are a food bank, all you have to do is say what food you need</li>
+        <li>Crowdsourced drivers volunteer to pickup and deliver extra food</li>
+        <li>We take care of all of the logistics, and prepare the most efficient driving route to pickup extra food and
+            deliver it to food banks in need</li>
+    </ul>
+</div>
+
+<div class="container-fluid p-3 my-3 border">
+    <h1>People and Earth will love it too :)</h1>
+    <ul>
+        <li>72% of US diners care about how restauarants handle food waste</li>
+        <li>47% of US diners would be willing to spend more to eat at a restaurant with an active food recovery program
+        </li>
+        <li>Reducing food waste by just 15% could provide enough sustenance to feed more than 25 million people annually
+        </li>
+        <li>Only five percent of food is composted in the US and as a result, uneaten food is the single largest
+            component of municipal solid waste</li>
+        <li>In landfills, food gradually breaks down to form methane, a greenhouse gas that’s up to 86 times more
+            powerful than carbon dioxide. According to a report from the UK based organization WRAP, if food were
+            removed from UK landfills, the greenhouse gas abatement would be equivalent to removing one-fifth of all the
+            cars in the UK from the road</li>
+    </ul>
+</div>
+
+<h4>Sources</h4>
+<ul>
+    <li><a
+            href="https://www.feedthechildren.org/pages/change-your-habits-change.html?gclid=EAIaIQobChMI48iP9_Xm5wIVzZ6zCh3u-QSIEAAYASAAEgIt9PD_BwE">feedthechildren.org</a>
+    </li>
+    <li><a
+            href="https://www.rescuingleftovercuisine.org/challenge?gclid=EAIaIQobChMI48iP9_Xm5wIVzZ6zCh3u-QSIEAAYAiAAEgL-4_D_BwE">rescuingleftovercuisine.org</a>
+    </li>
+    <li><a href="https://foodprint.org/issues/the-problem-of-food-waste/">foodprint.org</a></li>
+    <li><a href="https://pos.toasttab.com/blog/restaurant-waste-statistics">restauarant-waste-statistics</a></li>
+</ul>
 {% endblock %}
