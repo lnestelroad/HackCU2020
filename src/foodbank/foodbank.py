@@ -5,6 +5,7 @@ import json
 import random
 import warnings
 
+
 load_dotenv(verbose=True)
 gmaps = googlemaps.Client(key=os.getenv("API_KEY"))
 
