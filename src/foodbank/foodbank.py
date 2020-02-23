@@ -4,7 +4,7 @@ import os
 import json
 import random
 import warnings
-
+import copy
 
 load_dotenv(verbose=True)
 gmaps = googlemaps.Client(key=os.getenv("API_KEY"))
@@ -24,10 +24,21 @@ class Node:
         self.name = name
 
     def append_vertex(self, distance: float, vertex):
+        #  print(distance)
+        #  print(distance)
+        #  print(vertex)
         self.edges[vertex] = {"edge_weight" : distance}
+        #  print(self.edges)
 
     def to_json(self, json: dict):
-        json[self.name] = {"edges" : self.edges, "vertex_weight" : self.weight}
+       #  print("HERE ", self.edges, self.name)
+
+        if self.name in json:
+            raise Exception("Error, name already exists")
+
+        #  print("HERE ", {self.name : {"vertex" : self.weight, "edges" : self.edges}})
+        json[self.name] = {"vertex_weight" : self.weight, "edges" : self.edges}
+        print([i["edge_weight"] for i in self.edges.values()])
 
 
 class DistanceMatrix:
@@ -54,14 +65,10 @@ class DistanceMatrix:
         
         for i in range(len(origins)):
             node = Node(origins[i])
-            print(origins[i], end=": ")
             for j in range(len(rows[i]["elements"])):
                 node.append_vertex(rows[i]["elements"][j]["duration"]["value"], dests[j])
 
-            node.to_json(self.nodes)
-
-        print("NODES")
-        print(self.nodes)
+            self.nodes[origins[i]] = {"vertex_weight" : copy.deepcopy(node.weight), "edges" : copy.deepcopy(node.edges)}
 
     def to_json_file(self, file_name):
         self.query()
@@ -72,11 +79,25 @@ class DistanceMatrix:
 
     def query(self):
         if not self.ready:
-            origin_endpoints = [(i.pos[0], i.pos[1]) for i in self.origins]
-            destination_endpoints = [(i.pos[0], i.pos[1]) for i in self.destinations]
-            resp = gmaps.distance_matrix(origins = origin_endpoints, destinations = destination_endpoints)
-            print(resp)
+            #  origin_endpoints = [(i.pos[0], i.pos[1]) for i in self.origins]
+            #  destination_endpoints = [(i.pos[0], i.pos[1]) for i in self.destinations]
+            origin_endpoints = [i.address for i in self.origins]
+            destination_endpoints = [i.address for i in self.destinations]
+
+            total = origin_endpoints + destination_endpoints
+            #  i = 0
+            #  while(i < len(total)):
+            #      subarray = total[i:
+
+
+            #  while(i < len()
+            resp = gmaps.distance_matrix(origins = total, destinations = total)
             self.parse_distance_matrix(resp)
+            
+
+
+
+
         else:
             print("nothing to do")
         ready = True
