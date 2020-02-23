@@ -1,6 +1,6 @@
 {
     "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 4,
         "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -33,7 +33,7 @@
         }
     },
     "900 Baseline Rd, Boulder, CO 80302, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 0,
         "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -66,7 +66,7 @@
         }
     },
     "4800 Baseline Rd, Boulder, CO 80303, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 9,
         "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -99,7 +99,7 @@
         }
     },
     "673 S Broadway, Boulder, CO 80305, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 10,
         "type": 1,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -132,7 +132,7 @@
         }
     },
     "2400 Baseline Rd, Boulder, CO 80305, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 10,
         "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -165,7 +165,7 @@
         }
     },
     "2960 Valmont Rd, Boulder, CO 80301, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 1,
         "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {
@@ -231,7 +231,7 @@
         }
     },
     "5749 Arapahoe Ave, Boulder, CO 80303, USA": {
-        "vertex_weight": 5,
+        "vertex_weight": 2,
         "type": 0,
         "edges": {
             "unit 3, 2314, 2900 Baseline Rd, Boulder, CO 80303, USA": {

@@ -6,40 +6,28 @@ import random
 import warnings
 import copy
 
+# Load the dot env environment variable
 load_dotenv(verbose=True)
 gmaps = googlemaps.Client(key=os.getenv("API_KEY"))
-
 
 DEFAULT_CACHE="./.cache_money/addresses.json"
 MAX_CACHED=100
 
-
 class Node:
-
-    name = "NoName"
-    edges = {}
-    weight = random.randint(0, 10)
-
     def __init__(self, name):
+        self.name = "NoName"
+        self.edges = {}
+        self.weight = random.randint(0, 10)
         self.name = name
 
     def append_vertex(self, distance: float, vertex):
-        #  print(distance)
-        #  print(distance)
-        #  print(vertex)
         self.edges[vertex] = {"edge_weight" : distance}
-        #  print(self.edges)
 
     def to_json(self, json: dict):
-       #  print("HERE ", self.edges, self.name)
-
         if self.name in json:
             raise Exception("Error, name already exists")
 
-        #  print("HERE ", {self.name : {"vertex" : self.weight, "edges" : self.edges}})
         json[self.name] = {"vertex_weight" : self.weight, "edges" : self.edges}
-        print([i["edge_weight"] for i in self.edges.values()])
-
 
 class DistanceMatrix:
     
@@ -67,39 +55,26 @@ class DistanceMatrix:
             node = Node(origins[i])
             for j in range(len(rows[i]["elements"])):
                 node.append_vertex(rows[i]["elements"][j]["duration"]["value"], dests[j])
+            self.nodes[origins[i]] = {"vertex_weight" : node.weight, "edges" : node.edges}
 
-            self.nodes[origins[i]] = {"vertex_weight" : copy.deepcopy(node.weight), "edges" : copy.deepcopy(node.edges)}
 
     def to_json_file(self, file_name):
         self.query()
         with open(file_name, 'w') as fp:
             json.dump(self.nodes, fp)
 
-    
-
     def query(self):
         if not self.ready:
-            #  origin_endpoints = [(i.pos[0], i.pos[1]) for i in self.origins]
-            #  destination_endpoints = [(i.pos[0], i.pos[1]) for i in self.destinations]
             origin_endpoints = [i.address for i in self.origins]
             destination_endpoints = [i.address for i in self.destinations]
 
             total = origin_endpoints + destination_endpoints
-            #  i = 0
-            #  while(i < len(total)):
-            #      subarray = total[i:
-
-
-            #  while(i < len()
             resp = gmaps.distance_matrix(origins = total, destinations = total)
             self.parse_distance_matrix(resp)
             
-
-
-
-
         else:
             print("nothing to do")
+
         ready = True
 
     def push(self, address, identification, cache_file=DEFAULT_CACHE, d_type='d'):
@@ -242,14 +217,5 @@ class AddressNode:
         self.pos = (latitude, longitude)
 
 
-    
-
-
 if __name__ == '__main__':
     a = AddressNode(address="700 31st st boulder co 80303", cache_file="./temp", identification="test")
-
-
-
-
-
-
