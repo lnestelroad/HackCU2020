@@ -1,6 +1,7 @@
 .venv/
 .vscode/
 *.env*
+src/Database/postgres
 
 *.pyc
 __pycache__/

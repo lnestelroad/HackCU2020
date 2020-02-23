@@ -1,0 +1,33 @@
+version: '3.1'
+
+networks: 
+  postgres_backend:
+    external: False
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: Liam
+      POSTGRES_PASSWORD: liam
+      POSTGRES_DB: HackCU
+
+    ports:
+      - "5432:5432"
+        
+    volumes: 
+      - ./postgres:/var/lib/postgresql/data
+
+    networks:
+      - postgres_backend
+
+# docker network create postgres_backend 
+# docker run --name postgres \                                                                                                       [14:47:45]
+#   -e POSTGRES_PASSWORD=liam \
+#   -e POSTGRES_USER=Liam \
+#   -e POSTGRES_DB=HackCU \
+#   -d --restart always \
+#   -v postgres:/var/lib/postgresql/data \
+#   --net postgres_backend \
+#   postgres:9.6
