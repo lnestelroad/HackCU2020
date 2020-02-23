@@ -44,16 +44,21 @@ int main()
     add_vertex(B, G2);
 
     // Add edges gto g0
-    add_edge(A, B, 5, G0);
-    add_edge(B, C, 4, G0);
-    add_edge(B, D, 3, G0);
+    add_edge(A, B, 2, G0);
+    add_edge(B, C, 2, G0);
+    add_edge(B, D, 2, G0);
     add_edge(E, B, 2, G0);
-    add_edge(E, F, 1, G0);
+    add_edge(E, F, 2, G0);
     add_edge(F, D, 7, G0);
 
     std::vector<edge_t> MST;
 
-    //kruskal_minimum_spanning_tree(G0, std::back_inserter(MST));
+    kruskal_minimum_spanning_tree(G0, std::back_inserter(MST));
+
+    for (const auto &ed : MST)
+    {
+        std::cout << get(get(edge_weight, G0), ed) << "\n";
+    }
 
     write_graphviz(std::cout, G0);
 

@@ -30,10 +30,12 @@ BOOST_INSTALL_PROPERTY(edge, weight);
 using GraphvizAttributes =
     std::map<std::string, std::string>;
 
+typedef boost::property<boost::edge_weight_t, int, boost::property<boost::edge_index_t, int, boost::property<boost::edge_attribute_t, GraphvizAttributes, Edge>>> EdgeProperty;
+
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS,
                                     boost::undirectedS,
                                     boost::property<boost::vertex_attribute_t, GraphvizAttributes, Vertex>,
-                                    boost::property<boost::edge_index_t, int, boost::property<boost::edge_attribute_t, GraphvizAttributes, Edge>>,
+                                    EdgeProperty,
                                     boost::property<boost::graph_name_t, std::string,
                                                     boost::property<boost::graph_graph_attribute_t, GraphvizAttributes,
                                                                     boost::property<boost::graph_vertex_attribute_t, GraphvizAttributes,
@@ -54,6 +56,7 @@ typedef boost::subgraph<Graph>
 
 using edge_t = boost::graph_traits<SubGraph>::edge_descriptor;
 using vertex_t = boost::graph_traits<SubGraph>::vertex_descriptor;
+//boost::property_map<SubGraph, boost::edge_weight_t>::type weight = get
 //using edgeid_map = boost::property_map<SubGraph, boost::edge_index_t>::type;
 //edgeid_map edge_id = boost::get(edge_index, G);
 //boost::property_map < SubGraph,
