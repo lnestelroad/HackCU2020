@@ -55,3 +55,6 @@ void appendSubgraph(SubGraph &graph, const std::vector<vertex_t> &vertices);
 //void writeGraph(const Graph &)
 
 json preorderTraversal(const SubGraph &graph);
+
+edge_t findConnectingEdge(const SubGraph &graph);
+//edge_t findMinEdge(std::pair<boost::vertex_iterator, boost::vertex_iterator> group1, std::pair<boost::vertex_iterator, boost::vertex_iterator> group2);

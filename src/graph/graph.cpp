@@ -252,6 +252,55 @@ json preorderTraversal(const SubGraph &graph)
     return out;
 }
 
+edge_t findConnectingEdge(const SubGraph &graph)
+{
+    using namespace boost;
+
+    std::vector<bool> visited(num_vertices(graph), false);
+
+    std::stack<vertex_t> stack;
+    auto [begin, end] = vertices(graph);
+
+    stack.push(*begin);
+
+    int lowest = INT_MAX;
+    edge_t lowest_edge;
+
+    while (!stack.empty())
+    {
+        vertex_t vert = stack.top();
+        stack.pop();
+
+        if (!visited[vert])
+        {
+            visited[vert] = true;
+
+            for (auto [begin, end] = adjacent_vertices(vert, graph); begin != end; begin++)
+            {
+                if (get(get(vertex_root, graph), *begin) != get(get(vertex_root, graph), vert))
+                {
+                    auto [ed, found] = edge(vert, *begin, graph);
+                    if (get(get(edge_weight, graph), ed) < lowest)
+                    {
+                        lowest = get(get(edge_weight, graph), ed);
+                        lowest_edge = ed;
+                    }
+                }
+                if (!visited[*begin])
+                {
+                    stack.push(*begin);
+                }
+            }
+        }
+    }
+
+    /*if (lowest_edge == -1)
+    {
+        std::cout << "ERROR FINDING CONNECTING\n";
+    }*/
+    return lowest_edge;
+}
+
 int main()
 {
     using namespace boost;
@@ -262,32 +311,49 @@ int main()
     fs.open(filename, std::fstream::out);
 
     std::string jsonfile = "../../.cache_money/graph.json";
-    SubGraph g, source, sink;
+    SubGraph g, src, sink;
 
     std::vector<SubGraph> graphVec = constructGraph(jsonfile);
     g = graphVec[0];
-    source = graphVec[1];
+    src = graphVec[1];
     sink = graphVec[2];
 
-    std::cout << "Graph size: " << num_vertices(g) << "\nSource size: " << num_vertices(source) << "\nSink size: " << num_vertices(sink) << std::endl;
+    std::cout << "Graph size: " << num_vertices(g) << "\nSource size: " << num_vertices(src) << "\nSink size: " << num_vertices(sink) << std::endl;
 
     std::vector<edge_t> MST;
     kruskal_minimum_spanning_tree(g, std::back_inserter(MST));
 
     std::vector<edge_t> srcMST;
-    kruskal_minimum_spanning_tree(source, std::back_inserter(srcMST));
+    kruskal_minimum_spanning_tree(src, std::back_inserter(srcMST));
 
     std::vector<edge_t> sinkMST;
     kruskal_minimum_spanning_tree(sink, std::back_inserter(sinkMST));
 
     SubGraph MSTgraph = constructFromMST(g, MST);
-    SubGraph MSTsrcGraph = constructFromMST(source, srcMST);
+    SubGraph MSTsrcGraph = constructFromMST(src, srcMST);
     SubGraph MSTsinkGraph = constructFromMST(sink, sinkMST);
 
+    edge_t connecting = findConnectingEdge(g);
+    vertex_t c1 = source(connecting, g);
+    vertex_t c2 = target(connecting, g);
+
+    std::cout << "connecting edge: (" << get(get(vertex_name, g), c1) << "   ->    " << get(get(vertex_name, g), c2) << "\n";
+
     json output;
+    json srcTraversal = preorderTraversal(MSTsrcGraph);
+    json sinkTraversal = preorderTraversal(MSTsinkGraph);
+    json connect;
+    connect.push_back(get(get(vertex_name, g), c2));
+    output["source"] = srcTraversal;
+    output["connect"] = connect;
+    output["sink"] = sinkTraversal;
+
+    //output.push_back(srcTraversal + connect + sinkTraversal);
+    /*
     output.push_back(preorderTraversal(MSTgraph));
     output.push_back(preorderTraversal(MSTsrcGraph));
     output.push_back(preorderTraversal(MSTsinkGraph));
+    */
 
     std::cout << output << std::endl;
     write_graphviz(fs, MSTsinkGraph);
