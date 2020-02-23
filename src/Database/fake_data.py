@@ -1,21 +1,22 @@
-Restaurants:
-<<<<<<< Updated upstream
-    Carelli's
-    Cosmo's Pizza
-    May Wah
-    Cafe Mexicali
-    Moe's Original BBQ - Boulder
-    Taj Indian Cuisine
-    Dark Horse
-    Oregano's Italian Joint
-    Under The Sun Eatery and Pizzeria
-    Tandoori Grill
-    Pho Kitchen Bar & Grill
-    Chautauqua Dining Hall
-    Hot Pot Noodle House
-    South Side Walnut Cafe
-    Starbucks
-=======
+#!/user/bin/env python3
+
+import db_interface as db
+import argparse
+
+ # construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-b", "--build", required=True, type=int, default=0,
+    help="Tells the code whether to make new tables of keep the existing ones")
+ap.add_argument("-i", "--ip", required=True, type=str, default="172.22.0.2",
+    help="Tells the code what the database's IP address is.")
+args = vars(ap.parse_args())
+
+print ("Hello, World!")
+
+# Database add check
+interface = db.Database()
+interface.connectToDatabase(args["ip"])
+
 interface.addRestaurant("Carelli's", "645 30th St, Boulder, CO 80303")
 interface.addRestaurant("Cosmo's Pizza", "659 30th St, Boulder, CO 80303")
 interface.addRestaurant("May Wah", "2500 Baseline Rd, Boulder, CO 80305")
@@ -31,10 +32,3 @@ interface.addRestaurant("Chautauqua Dining Hall", "900 Baseline Rd, Boulder, CO 
 interface.addRestaurant("Hot Pot Noodle House", "4800 Baseline Rd, Boulder, CO 80303")
 interface.addRestaurant("South Side Walnut Cafe", "673 S Broadway St, Boulder, CO 80305")
 interface.addRestaurant("Starbucks", "2400 Baseline Rd, Boulder, CO 80305")
->>>>>>> Stashed changes
-
-Food Banks:
-	"Harvest of Hope", "2960 Valmont Rd, Boulder, CO 80301"
-	"Community Food Share", "650 S Taylor Ave, Louisville, CO 80027"
-    "Boulder Food Rescue", "5749 Arapahoe Ave, Boulder, CO 80303"
-	"Emergency Family Assistance Association", "1575 Yarmouth Ave, Boulder, CO 80304"
