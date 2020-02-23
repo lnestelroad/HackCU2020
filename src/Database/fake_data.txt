@@ -1,23 +1,4 @@
 Restaurants:
-<<<<<<< Updated upstream
-    Carelli's
-    Cosmo's Pizza
-    May Wah
-    Cafe Mexicali
-    Moe's Original BBQ - Boulder
-    Taj Indian Cuisine
-    Dark Horse
-    Oregano's Italian Joint
-    Under The Sun Eatery and Pizzeria
-    Tandoori Grill
-    Pho Kitchen Bar & Grill
-    Chautauqua Dining Hall
-    Hot Pot Noodle House
-    South Side Walnut Cafe
-    Starbucks
-=======
-interface.addRestaurant("Carelli's", "645 30th St, Boulder, CO 80303")
-interface.addRestaurant("Cosmo's Pizza", "659 30th St, Boulder, CO 80303")
 interface.addRestaurant("May Wah", "2500 Baseline Rd, Boulder, CO 80305")
 interface.addRestaurant("Cafe Mexicali", "2850 Baseline Rd, Boulder, CO 80303")
 interface.addRestaurant("Moe's Original BBQ - Boulder", "675 30th St, Boulder, CO 80303")
