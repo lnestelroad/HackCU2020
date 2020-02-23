@@ -4,8 +4,10 @@
 #include <stack>
 
 const static std::string filename{"viz.dot"};
+const static std::string outfile{"../../.cache_money/truck_paths.json"};
 
-std::vector<SubGraph> constructGraph(const std::string &jsonfile)
+std::vector<SubGraph>
+constructGraph(const std::string &jsonfile)
 {
     using namespace boost;
     SubGraph g{0};
@@ -345,18 +347,24 @@ int main()
     //graphTest();
 
     std::fstream fs;
+    std::fstream out;
 
     fs.open(filename, std::fstream::out);
+    out.open(outfile, std::fstream::out);
 
     std::string jsonfile = "../../.cache_money/graph.json";
     SubGraph g, src, sink;
 
     std::vector<SubGraph> graphVec = constructGraph(jsonfile);
 
-    std::cout << constructRoute(graphVec) << std::endl;
+    json outJson = constructRoute(graphVec);
+    std::cout << outJson << std::endl;
     //write_graphviz(fs, MSTsinkGraph);
 
+    out << outJson;
+
     fs.close();
+    out.close();
 
     return 0;
 }
