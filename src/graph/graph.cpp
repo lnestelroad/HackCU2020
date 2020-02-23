@@ -1,6 +1,5 @@
 #include "graph.hpp"
 #include <boost/graph/kruskal_min_spanning_tree.hpp>
-#include <string_view>
 #include <fstream>
 
 const static std::string filename{"graphviz.dot"};
@@ -95,5 +94,24 @@ int main()
 
     fs.close();
 
+    return 0;
+}
+
+SubGraph constructGraph(const std::string &filename)
+{
+    // IMPLIMENT
+    SubGraph g{0};
+    return g;
+}
+
+SubGraph constructSubgraphFromEdges(const SubGraph &parent, const std::vector<edge_t> &edges)
+{
+    // IMPLIMENT
+    SubGraph g{0};
+    return g;
+}
+
+void appendSubgraph(SubGraph &graph, const std::vector<vertex_t> &vertices)
+{
     return 0;
 }
