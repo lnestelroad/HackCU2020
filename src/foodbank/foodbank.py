@@ -72,18 +72,44 @@ class DistanceMatrix:
             json.dump(self.nodes, fp)
 
     def query(self):
-        if not self.ready:
-            origin_endpoints = [i.address for i in self.origins]
-            destination_endpoints = [i.address for i in self.destinations]
+        origin_endpoints = [i.address for i in self.origins]
+        destination_endpoints = [i.address for i in self.destinations]
+        #
+        #  self.json = dict({i.address : {"type" : i.type, "vertex_weight" : random.randint(0, 10), "edges" : {}} for i in self.destinations},
+        #                 **{i.address : {"type" : i.type, "vertex_weight" : random.randint(0, 10), "edges" : {}} for i in self.origins})
+        #
+        #  CHUNKS = 20
+        #
+        #  total = origin_endpoints + destination_endpoints
+        #
+        #  subarrays = [total[i * CHUNKS: i*CHUNKS + CHUNKS] for i in range(int(len(total) / CHUNKS) + 1)]
+        #  subsubarrays = [i[0:CHUNKS /
+        #
+        #
+        #  for i in subarrays:
+        #      join(i[0:CHUNKS / 2], i[CHUNKS / 2:])
+        #
+        #  for i in
+        #
+        #
+        #
+        #
+        #
+        #  self.json = {}
+    #
+        #  total = origin_endpoints + destination_endpoints
+    #
+        #  for i in
+        #
+        #
+        #
+        #
 
-            total = origin_endpoints + destination_endpoints
-            resp = gmaps.distance_matrix(origins = total, destinations = total)
-            self.parse_distance_matrix(resp)
+        total = origin_endpoints + destination_endpoints
+        resp = gmaps.distance_matrix(origins = total, destinations = total)
+        self.parse_distance_matrix(resp)
             
-        else:
-            print("nothing to do")
 
-        ready = True
 
     def push(self, address, identification, cache_file=DEFAULT_CACHE, d_type='d'):
         self.ready = False
